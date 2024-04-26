@@ -5,14 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+/**
+ * @author 11582
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Command {
 
-    //连接信息编码
     private Integer code;
 
-    //用户昵称
     private String nickname;
 }

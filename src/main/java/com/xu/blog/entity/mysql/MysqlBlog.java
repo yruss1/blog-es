@@ -6,6 +6,9 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 
 
+/**
+ * @author 11582
+ */
 @Data
 @Table(name = "t_blog")
 @Entity

@@ -12,6 +12,9 @@ import java.io.IOException;
 
 import static com.xu.blog.task.ApiServiceGenerator.getApiError;
 
+/**
+ * @author 11582
+ */
 public class ApiCallbackAdapter<T> implements Callback<T> {
 
     private final BlogApiCallback<T> callback;
@@ -20,6 +23,7 @@ public class ApiCallbackAdapter<T> implements Callback<T> {
         this.callback = callback;
     }
 
+    @Override
     public void onResponse(@NotNull Call<T> call, Response<T> response) {
         if (response.isSuccessful()) {
             callback.onResponse(response.body());

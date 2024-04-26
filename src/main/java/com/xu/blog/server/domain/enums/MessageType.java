@@ -3,6 +3,10 @@ package com.xu.blog.server.domain.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * @author 11582
+ */
+
 @Getter
 @AllArgsConstructor
 public enum MessageType {

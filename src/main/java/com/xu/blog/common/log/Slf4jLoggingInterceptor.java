@@ -10,6 +10,7 @@ import java.io.IOException;
 
 /**
  * Logging Interceptor
+ * @author 11582
  */
 public class Slf4jLoggingInterceptor implements Interceptor {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiServiceGenerator.class);

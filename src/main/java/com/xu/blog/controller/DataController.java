@@ -1,5 +1,7 @@
 package com.xu.blog.controller;
 
+import com.xu.blog.common.Result;
+import com.xu.blog.common.exception.BusinessException;
 import com.xu.blog.entity.es.EsBlog;
 import com.xu.blog.entity.mysql.MysqlBlog;
 import com.xu.blog.repository.EsBlogRepository;
@@ -17,6 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * @author 11582
+ */
 @RestController
 @Slf4j
 public class DataController {
@@ -59,7 +64,7 @@ public class DataController {
             map.put("list", content);
 
         } else {
-            return "你要啥呢小老弟";
+            throw new BusinessException("错误的搜索类型！请检查");
         }
         watch.stop();
         // 计算耗时
@@ -71,7 +76,12 @@ public class DataController {
     @GetMapping("/blog/{id}")
     public Object blog(@PathVariable String id) {
         Optional<MysqlBlog> byId = mysqlBlogRepository.findById(id);
-        return byId.get();
+        if (byId.isPresent()){
+            return byId.get();
+        }else {
+            return Result.error("博客不存在！");
+        }
+
 
     }
 

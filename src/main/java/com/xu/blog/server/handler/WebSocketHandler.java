@@ -9,6 +9,9 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
 
+/**
+ * @author 11582
+ */
 public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {//通过TextWebSocketFrame作为消息承载体
 
     @Override

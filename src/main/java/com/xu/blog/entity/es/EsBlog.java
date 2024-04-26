@@ -7,11 +7,10 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-@Data
 /**
- * useServerConfiguration = true 使用线上的配置,createIndex 在项目启动的时候不要创建索引，通常在 kibana 中已经配置过了
+ * @author 11582
  */
-
+@Data
 @Document(indexName = "blog", type = "doc", useServerConfiguration = true, createIndex = false)
 public class EsBlog {
 

@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+/**
+ * @author 11582
+ */
 @Data
 @AllArgsConstructor@NoArgsConstructor
 public class RawBlog implements Serializable {

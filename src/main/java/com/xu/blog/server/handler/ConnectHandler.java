@@ -8,7 +8,8 @@ import io.netty.channel.ChannelHandlerContext;
 
 /**
  * 连接请求的处理器
- **/
+ *
+ * @author 11582*/
 public class ConnectHandler {
 
     public static void execute(ChannelHandlerContext channelHandlerContext, Command command) {
@@ -19,9 +20,7 @@ public class ConnectHandler {
             channelHandlerContext.channel().disconnect();
             return;
         }
-
         IMServer.USERS.put(command.getNickname(), channelHandlerContext.channel());
-
         channelHandlerContext.channel().writeAndFlush(Result.success("与服务端建立连接成功"));
         //返回群聊的人
         channelHandlerContext.channel().writeAndFlush(Result.success(JSON.toJSONString(IMServer.USERS.keySet())));

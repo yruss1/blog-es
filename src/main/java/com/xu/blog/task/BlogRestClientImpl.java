@@ -7,6 +7,9 @@ import com.xu.blog.task.restApi.BlogRestClient;
 import static com.xu.blog.common.config.ApiConfig.GRANT_TYPE;
 import static com.xu.blog.task.ApiServiceGenerator.createService;
 
+/**
+ * @author 11582
+ */
 public class BlogRestClientImpl implements BlogRestClient {
 
     private final BlogApiService blogApiService;

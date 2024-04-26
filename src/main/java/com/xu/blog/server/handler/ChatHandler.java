@@ -1,6 +1,7 @@
 package com.xu.blog.server.handler;
 
 import com.alibaba.fastjson2.JSON;
+import com.xu.blog.common.exception.BusinessException;
 import com.xu.blog.server.IMServer;
 import com.xu.blog.server.domain.Result;
 import com.xu.blog.server.domain.enums.MessageType;
@@ -11,6 +12,9 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.internal.StringUtil;
 
 
+/**
+ * @author 11582
+ */
 public class ChatHandler {
     public static void execute(ChannelHandlerContext channelHandlerContext, TextWebSocketFrame textWebSocketFrame) {
         try {
@@ -35,7 +39,7 @@ public class ChatHandler {
                     channelHandlerContext.channel().writeAndFlush(Result.fail("不支持消息类型"));
             }
         } catch (Exception e) {
-
+            throw new BusinessException("消息处理失败！");
         }
     }
 }

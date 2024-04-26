@@ -5,6 +5,9 @@ import com.xu.blog.repository.UserRepository;
 import com.xu.blog.service.UserService;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author 11582
+ */
 @Service
 public class UserServiceImpl implements UserService {
 

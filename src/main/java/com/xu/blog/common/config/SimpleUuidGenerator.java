@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 
+/**
+ * @author 11582
+ */
 public class SimpleUuidGenerator implements IdentifierGenerator {
 
     private static final Logger logger = LoggerFactory.getLogger(SimpleUuidGenerator.class);

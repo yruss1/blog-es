@@ -5,10 +5,14 @@ import lombok.Getter;
 
 /**
  * 聊天的命令枚举
- **/
+ *
+ * @author 11582*/
 @Getter
 @AllArgsConstructor
 public enum CommandType {
+    /**
+     * 状态码
+     */
     CONNECTION(1001),
     CHAT(1002),
     JOIN_GROUP(1003),

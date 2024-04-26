@@ -30,7 +30,7 @@ public class BlogApiTask {
     @Value("${blog.clientId}")
     public String clientId;
     @Value("${blog.clientSecret}")
-    public String ClientSecret;
+    public String clientSecret;
     private static final Logger logger = LoggerFactory.getLogger(BlogApiTask.class);
     private final ConcurrentHashMap<String, MysqlBlog> map = new ConcurrentHashMap<>();
     private final MysqlBlogRepository mysqlBlogRepository;
@@ -39,11 +39,11 @@ public class BlogApiTask {
         this.mysqlBlogRepository = mysqlBlogRepository;
     }
 
-//    @PostConstruct
+
     public void getArticlesTask(){
         BlogRestClient client = RestApiClientFactory.newInstance(
                 clientId,
-                ClientSecret)
+                clientSecret)
                 .newBlogRestClient();
         client.getAccessToken(response ->  {
             JsonObject jsonObject = GsonUtil.fromJson(GsonUtil.toJsonString(response), JsonObject.class);

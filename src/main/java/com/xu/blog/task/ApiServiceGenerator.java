@@ -21,6 +21,9 @@ import java.util.concurrent.TimeUnit;
 
 import static com.xu.blog.common.log.Slf4jLoggingInterceptor.HandleLoggingInterceptor;
 
+/**
+ * @author 11582
+ */
 public class ApiServiceGenerator {
 
     @Getter

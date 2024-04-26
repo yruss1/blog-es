@@ -9,34 +9,29 @@ import java.util.List;
 import java.util.Map;
 
 
+/**
+ * @author 11582
+ */
 public class GsonUtil {
 
-    //线程安全的
     private static final Gson GSON;
-    private static final Gson GSON_NULL; // 不过滤空值
+    private static final Gson GSON_NULL;
     static {
-        GSON = new GsonBuilder().enableComplexMapKeySerialization() //当Map的key为复杂对象时,需要开启该方法
-//                .serializeNulls() //当字段值为空或null时，依然对该字段进行转换
-//                .excludeFieldsWithoutExposeAnnotation()//打开Export注解，但打开了这个注解,副作用，要转换和不转换都要加注解
-                .setDateFormat("yyyy-MM-dd HH:mm:ss")//序列化日期格式  "yyyy-MM-dd"
-//                .setPrettyPrinting() //自动格式化换行
-                .disableHtmlEscaping() //防止特殊字符出现乱码
+        GSON = new GsonBuilder().enableComplexMapKeySerialization()
+                .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .disableHtmlEscaping()
                 .create();
-        GSON_NULL = new GsonBuilder().enableComplexMapKeySerialization() //当Map的key为复杂对象时,需要开启该方法
-                .serializeNulls() //当字段值为空或null时，依然对该字段进行转换
-//                .excludeFieldsWithoutExposeAnnotation()//打开Export注解，但打开了这个注解,副作用，要转换和不转换都要加注解
-                .setDateFormat("yyyy-MM-dd HH:mm:ss")//序列化日期格式  "yyyy-MM-dd"
-//                .setPrettyPrinting() //自动格式化换行
-                .disableHtmlEscaping() //防止特殊字符出现乱码
+        GSON_NULL = new GsonBuilder().enableComplexMapKeySerialization()
+                .serializeNulls()
+                .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .disableHtmlEscaping()
                 .create();
     }
 
-    //获取gson解析器
     public static Gson getGson() {
         return GSON;
     }
 
-    //获取gson解析器 有空值 解析
     public static Gson getWriteNullGson() {
         return GSON_NULL;
     }
@@ -62,8 +57,8 @@ public class GsonUtil {
      *
      * @param json     源字符串
      * @param classOfT 目标对象类型
-     * @param <T>
-     * @return
+     * @param <T> 可变
+     * @return 可变
      */
     public static <T> T strToJavaBean(String json, Class<T> classOfT) {
         return GSON.fromJson(json, classOfT);
@@ -81,9 +76,9 @@ public class GsonUtil {
 
     /**
      * 转成list
-     * @param gsonString
-     * @param cls
-     * @return
+     * @param gsonString 字符串
+     * @param cls 类型
+     * @return List<T>
      */
     public static <T> List<T> strToList(String gsonString, Class<T> cls) {
         return GSON.fromJson(gsonString, new TypeToken<List<T>>() {
@@ -92,8 +87,8 @@ public class GsonUtil {
 
     /**
      * 转成list中有map的
-     * @param gsonString
-     * @return
+     * @param gsonString 字符串
+     * @return List<Map<String, T>>
      */
     public static <T> List<Map<String, T>> strToListMaps(String gsonString) {
         return GSON.fromJson(gsonString, new TypeToken<List<Map<String, String>>>() {
@@ -102,8 +97,8 @@ public class GsonUtil {
 
     /**
      * 转成map
-     * @param gsonString
-     * @return
+     * @param gsonString 字符串
+     * @return map
      */
     public static <T> Map<String, T> strToMaps(String gsonString) {
         return GSON.fromJson(gsonString, new TypeToken<Map<String, T>>() {

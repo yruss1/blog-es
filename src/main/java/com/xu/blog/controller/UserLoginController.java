@@ -17,6 +17,9 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserLoginController {
 
+    private static final String USER_NAME = "userName";
+    private static final String PASSWORD = "password";
+
     private final UserService userService;
 
     public UserLoginController(UserService userService) {
@@ -25,8 +28,8 @@ public class UserLoginController {
 
     @PostMapping("/doLogin")
     public SaResult doLogin(@RequestBody Map<String, String> map){
-        User user = userService.doLogin(map.get("userName"));
-        if (map.get("password").equals(user.getPassword())){
+        User user = userService.doLogin(map.get(USER_NAME));
+        if (map.get(PASSWORD).equals(user.getPassword())){
             StpUtil.login(user.getId());
             return SaResult.ok();
         }
