@@ -3,8 +3,11 @@ package com.xu.blog.task.restApi;
 import retrofit2.Call;
 import retrofit2.http.*;
 
-import static com.xu.blog.config.ApiConfig.AUTHORIZATION;
+import static com.xu.blog.common.config.ApiConfig.AUTHORIZATION;
 
+/**
+ * @author 11582
+ */
 public interface BlogApiService {
 
     @FormUrlEncoded

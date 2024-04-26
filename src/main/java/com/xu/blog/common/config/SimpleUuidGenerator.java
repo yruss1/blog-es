@@ -1,7 +1,7 @@
-package com.xu.blog.config;
+package com.xu.blog.common.config;
 
 import com.xu.blog.entity.mysql.MysqlBlog;
-import com.xu.blog.util.GsonUtil;
+import com.xu.blog.common.util.GsonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;

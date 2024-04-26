@@ -1,4 +1,4 @@
-package com.xu.blog.config;
+package com.xu.blog.common.config;
 
 public class ApiConfig {
     public static final String BLOG_URL = "https://api.cnblogs.com";

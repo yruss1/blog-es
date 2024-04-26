@@ -1,7 +1,7 @@
 package com.xu.blog.task;
 
-import com.xu.blog.exception.ApiError;
-import com.xu.blog.exception.ApiException;
+import com.xu.blog.common.exception.ApiError;
+import com.xu.blog.common.exception.ApiException;
 import com.xu.blog.task.restApi.BlogApiCallback;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;

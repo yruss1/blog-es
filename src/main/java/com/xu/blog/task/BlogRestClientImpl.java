@@ -4,7 +4,7 @@ import com.xu.blog.task.restApi.BlogApiCallback;
 import com.xu.blog.task.restApi.BlogApiService;
 import com.xu.blog.task.restApi.BlogRestClient;
 
-import static com.xu.blog.config.ApiConfig.GRANT_TYPE;
+import static com.xu.blog.common.config.ApiConfig.GRANT_TYPE;
 import static com.xu.blog.task.ApiServiceGenerator.createService;
 
 public class BlogRestClientImpl implements BlogRestClient {

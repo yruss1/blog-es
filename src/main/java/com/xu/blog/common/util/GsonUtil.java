@@ -1,4 +1,4 @@
-package com.xu.blog.util;
+package com.xu.blog.common.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

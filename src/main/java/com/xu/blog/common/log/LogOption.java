@@ -1,4 +1,4 @@
-package com.xu.blog.log;
+package com.xu.blog.common.log;
 
 import lombok.Getter;
 

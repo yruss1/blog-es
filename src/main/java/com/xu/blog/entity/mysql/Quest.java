@@ -9,20 +9,22 @@ import javax.persistence.*;
  * @author 11582
  */
 @Data
-@Table(name = "t_user")
+@Table(name = "t_quest")
 @Entity
-public class User {
+public class Quest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "simple-uuid")
     @GenericGenerator(name = "simple-uuid", strategy = "com.xu.blog.common.config.SimpleUuidGenerator")
     @Column(name = "id")
-    private String id;
-    @Column(name = "user_name")
-    private String userName;
-    @Column(name = "password")
-    private String password;
-    @Column(name = "identity_type")
-    private String identityType;
+    private Integer id;
+    @Column(name = "user_id")
+    private String userId;
+    @Column(name = "expert_id")
+    private String expertId;
+    @Column(name = "message")
+    private String message;
+    @Column(name = "time")
+    private Long time;
 
 }

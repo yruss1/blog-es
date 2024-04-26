@@ -6,11 +6,13 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import com.xu.blog.entity.mysql.User;
 import com.xu.blog.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
+/**
+ * @author 11582
+ */
 @RestController
 @RequestMapping("/user")
 public class UserLoginController {
@@ -21,10 +23,10 @@ public class UserLoginController {
         this.userService = userService;
     }
 
-    @GetMapping("/doLogin/{userName}/{password}")
-    public SaResult doLogin(@PathVariable String userName,@PathVariable String password){
-        User user = userService.doLogin(userName);
-        if (password.equals(user.getPassword())){
+    @PostMapping("/doLogin")
+    public SaResult doLogin(@RequestBody Map<String, String> map){
+        User user = userService.doLogin(map.get("userName"));
+        if (map.get("password").equals(user.getPassword())){
             StpUtil.login(user.getId());
             return SaResult.ok();
         }

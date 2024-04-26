@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class MysqlBlog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "simple-uuid")
-    @GenericGenerator(name = "simple-uuid", strategy = "com.xu.blog.config.SimpleUuidGenerator")
+    @GenericGenerator(name = "simple-uuid", strategy = "com.xu.blog.common.config.SimpleUuidGenerator")
     @Column(name = "Id")
     private String id;
     @Column(name = "Title")

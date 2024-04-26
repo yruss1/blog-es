@@ -1,4 +1,4 @@
-package com.xu.blog.config;
+package com.xu.blog.common.config;
 
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import org.springframework.context.annotation.Configuration;

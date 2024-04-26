@@ -9,12 +9,14 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.xu.blog.config.ApiConfig.CLIENT_ID;
-import static com.xu.blog.config.ApiConfig.CLIENT_SECRET;
+import static com.xu.blog.common.RequestType.POST;
+import static com.xu.blog.common.config.ApiConfig.CLIENT_ID;
+import static com.xu.blog.common.config.ApiConfig.CLIENT_SECRET;
 
 
 /**
  * A request interceptor that injects the API Key Header into requests, and signs messages, whenever required.
+ * @author 11582
  */
 public class AuthenticationInterceptor implements Interceptor {
 
@@ -32,7 +34,7 @@ public class AuthenticationInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Request original = chain.request();
         Request.Builder newRequestBuilder = original.newBuilder();
-        if ("POST".equals(original.method()) && original.body() instanceof FormBody) {
+        if (POST.equalsIgnoreCase(original.method()) && original.body() instanceof FormBody) {
             FormBody.Builder bodyBuilder = new FormBody.Builder();
             FormBody formBody = (FormBody) original.body();
             for (int i = 0; i < formBody.size(); i++) {
@@ -50,8 +52,12 @@ public class AuthenticationInterceptor implements Interceptor {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         final AuthenticationInterceptor that = (AuthenticationInterceptor) o;
         return Objects.equals(clientId, that.clientId) &&
                 Objects.equals(secret, that.secret);

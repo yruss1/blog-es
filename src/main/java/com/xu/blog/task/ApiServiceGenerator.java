@@ -1,7 +1,7 @@
 package com.xu.blog.task;
 
-import com.xu.blog.exception.ApiError;
-import com.xu.blog.exception.ApiException;
+import com.xu.blog.common.exception.ApiError;
+import com.xu.blog.common.exception.ApiException;
 import com.xu.blog.task.security.AuthenticationInterceptor;
 import lombok.Getter;
 import okhttp3.Dispatcher;
@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.concurrent.TimeUnit;
 
-import static com.xu.blog.log.Slf4jLoggingInterceptor.HandleLoggingInterceptor;
+import static com.xu.blog.common.log.Slf4jLoggingInterceptor.HandleLoggingInterceptor;
 
 public class ApiServiceGenerator {
 

@@ -7,7 +7,7 @@ import com.xu.blog.entity.RawBlog;
 import com.xu.blog.entity.mysql.MysqlBlog;
 import com.xu.blog.repository.MysqlBlogRepository;
 import com.xu.blog.task.restApi.BlogRestClient;
-import com.xu.blog.util.GsonUtil;
+import com.xu.blog.common.util.GsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static com.xu.blog.config.ApiConfig.*;
+import static com.xu.blog.common.config.ApiConfig.*;
 
 
 @EnableScheduling
