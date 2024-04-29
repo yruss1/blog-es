@@ -1,5 +1,6 @@
 package com.xu.blog.service;
 
+import com.xu.blog.entity.UserDto;
 import com.xu.blog.entity.mysql.User;
 
 /**
@@ -13,5 +14,12 @@ public interface UserService {
      * @return 用户实体
      */
     User doLogin(String userName);
+
+    /**
+     *  返回用户信息
+     * @param id 用户id
+     * @return 用户信息实体
+     */
+    UserDto userInfo(String id);
 
 }

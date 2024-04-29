@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+<body>
+
+<template>
+    <div class="login">
+        <div class="mylogin" align="center">
+            <h4>登录</h4>
+            <el-form
+                    :model="loginForm"
+                    :rules="loginRules"
+                    ref="loginForm"
+                    label-width="0px"
+            >
+                <el-form-item label="" prop="account" style="margin-top: 10px">
+                    <el-row>
+                        <el-col :span="2">
+                            <span class="el-icon-s-custom"></span>
+                        </el-col>
+                        <el-col :span="22">
+                            <el-input
+                                    class="inps"
+                                    placeholder="账号"
+                                    v-model="loginForm.account"
+                            >
+                            </el-input>
+                        </el-col>
+                    </el-row>
+                </el-form-item>
+                <el-form-item label="" prop="passWord">
+                    <el-row>
+                        <el-col :span="2">
+                            <span class="el-icon-lock"></span>
+                        </el-col>
+                        <el-col :span="22">
+                            <el-input
+                                    class="inps"
+                                    type="password"
+                                    placeholder="密码"
+                                    v-model="loginForm.passWord"
+                            ></el-input>
+                        </el-col>
+                    </el-row>
+                </el-form-item>
+                <el-form-item style="margin-top: 55px">
+                    <el-button type="primary" round class="submitBtn" @click="submitForm"
+                    >登录
+                    </el-button>
+                </el-form-item>
+                <div class="unlogin">
+                    <router-link :to="{ path: '/forgetpwd' }"> 忘记密码? </router-link>
+                    |
+                    <router-link :to="{ path: '/register' }">
+                        <a href="register.vue" target="_blank" align="right">注册新账号</a>
+                    </router-link>
+                </div>
+            </el-form>
+        </div>
+    </div>
+</template>
+<script>
+    import { mapMutations } from "vuex";
+
+    export default {
+        name: "Login",
+        data: function () {
+            return {
+                loginForm: {
+                    account: "",
+                    passWord: "",
+                },
+                loginRules: {
+                    account: [{ required: true, message: "请输入账号", trigger: "blur" }],
+                    passWord: [{ required: true, message: "请输入密码", trigger: "blur" }],
+                },
+            };
+        },
+
+        methods: {
+            ...mapMutations(["changeLogin"]),
+            submitForm() {
+                const userAccount = this.loginForm.account;
+                const userPassword = this.loginForm.passWord;
+                if (!userAccount) {
+                    return this.$message({
+                        type: "error",
+                        message: "账号不能为空！",
+                    });
+                }
+                if (!userPassword) {
+                    return this.$message({
+                        type: "error",
+                        message: "密码不能为空！",
+                    });
+                }
+                console.log("用户输入的账号为：", userAccount);
+                console.log("用户输入的密码为：", userPassword);
+
+            },
+        },
+    };
+</script>
+</body>
+</html>

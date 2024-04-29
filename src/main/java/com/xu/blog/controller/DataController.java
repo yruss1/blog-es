@@ -37,12 +37,12 @@ public class DataController {
 
 
     @GetMapping("/blogs")
-    public Object blogList() {
-        return mysqlBlogRepository.queryAll();
+    public Result<List<MysqlBlog>> blogList() {
+        return Result.ok(mysqlBlogRepository.queryAll());
     }
 
     @PostMapping("/search")
-    public Object search(@RequestBody Param param) {
+    public Result<Map<String, Object>> search(@RequestBody Param param) {
         Map<String, Object> map = new HashMap<>();
         // 统计耗时
         StopWatch watch = new StopWatch();
@@ -70,19 +70,13 @@ public class DataController {
         // 计算耗时
         long millis = watch.getTotalTimeMillis();
         map.put("duration", millis);
-        return map;
+        return Result.ok(map);
     }
 
     @GetMapping("/blog/{id}")
-    public Object blog(@PathVariable String id) {
+    public Result<Object> blog(@PathVariable String id) {
         Optional<MysqlBlog> byId = mysqlBlogRepository.findById(id);
-        if (byId.isPresent()){
-            return byId.get();
-        }else {
-            return Result.error("博客不存在！");
-        }
-
-
+        return byId.<Result<Object>>map(Result::ok).orElseGet(() -> Result.error("博客不存在！"));
     }
 
 

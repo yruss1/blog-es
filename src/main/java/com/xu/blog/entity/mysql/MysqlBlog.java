@@ -1,5 +1,6 @@
 package com.xu.blog.entity.mysql;
 
+import com.xu.blog.entity.BlogVo;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -35,5 +36,26 @@ public class MysqlBlog {
     @Column(name = "update_time")
     private String updateTime;
 
+    public MysqlBlog(BlogVo vo){
+        this.author = vo.getAuthor();
+        this.title = vo.getTitle();
+        this.summary = vo.getSummary();
+        this.content = vo.getContent();
+    }
 
+    public MysqlBlog(String id, String title, String summary, String author, String viewCount, String digCount, String content, String createTime, String updateTime) {
+        this.id = id;
+        this.title = title;
+        this.summary = summary;
+        this.author = author;
+        this.viewCount = viewCount;
+        this.digCount = digCount;
+        this.content = content;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+    }
+
+    public MysqlBlog() {
+
+    }
 }

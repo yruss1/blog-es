@@ -3,11 +3,12 @@ package com.xu.blog.task;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.xu.blog.common.util.GsonUtil;
+import com.xu.blog.common.util.HtmlUtils;
 import com.xu.blog.entity.RawBlog;
 import com.xu.blog.entity.mysql.MysqlBlog;
 import com.xu.blog.repository.MysqlBlogRepository;
 import com.xu.blog.task.restApi.BlogRestClient;
-import com.xu.blog.common.util.GsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,9 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -22,6 +26,9 @@ import java.util.concurrent.TimeUnit;
 import static com.xu.blog.common.config.ApiConfig.*;
 
 
+/**
+ * @author 11582
+ */
 @EnableScheduling
 @EnableAsync
 @Service
@@ -39,7 +46,7 @@ public class BlogApiTask {
         this.mysqlBlogRepository = mysqlBlogRepository;
     }
 
-
+//    @PostConstruct
     public void getArticlesTask(){
         BlogRestClient client = RestApiClientFactory.newInstance(
                 clientId,
@@ -69,9 +76,17 @@ public class BlogApiTask {
                                         response2 -> {
                                             MysqlBlog blog = new MysqlBlog();
                                             blog.setContent(GsonUtil.toJsonString(response2));
-                                            long currentTimeMillis = System.currentTimeMillis();
-                                            blog.setCreateTime(GsonUtil.toJsonString(currentTimeMillis));
-                                            blog.setUpdateTime(GsonUtil.toJsonString(currentTimeMillis));
+                                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                                            SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                            Date d = null;
+                                            try {
+                                                d = sdf.parse(rawBlog.getCreateTime());
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                            String formattedTime = output.format(d);
+                                            blog.setCreateTime(formattedTime);
+                                            blog.setUpdateTime(formattedTime);
                                             blog.setId(rawBlog.getId());
                                             blog.setTitle(rawBlog.getTitle());
                                             blog.setSummary(rawBlog.getSummary());
@@ -95,6 +110,7 @@ public class BlogApiTask {
                 logger.info("总共获取文章数量为：{}",map.size());
                 for (MysqlBlog blog : map.values()){
                     logger.info("id：{}的文章点赞数量为{}", blog.getId(), blog.getDigCount());
+                    blog.setContent(HtmlUtils.Html2Text(blog.getContent()));
                     mysqlBlogRepository.save(blog);
                 }
             }

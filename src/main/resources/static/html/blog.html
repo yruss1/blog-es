@@ -5,9 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-grid.min.css">
-    <link rel="stylesheet" href="css/bootstrap-reboot.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="../css/bootstrap-reboot.min.css">
     <style>
         img {
             height: auto;
@@ -30,7 +30,14 @@
         <div class="col-9">
 
             <h4 id="title">{{title}}</h4>
-            <span>作者：{{author}} | 发布时间：{{createTime}}</span>
+
+                <span>作者：
+                    <a :href="'quest.html?author='+author" style="font-weight: bold">
+                        {{author}}
+                    </a>
+                    | 发布时间：{{createTime}} | 阅读量：{{viewCount}} | 点赞量： {{digCount}}
+                </span>
+
 
             <div v-html="content" style="width: 100%;height: auto;">
 
@@ -54,9 +61,9 @@
         </div>
     </div>
 </div>
-<script src="./js/vue.js"></script>
-<script src="./js/axios.min.js"></script>
-<script src="./js/marked.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/axios.min.js"></script>
+<script src="../js/marked.js"></script>
 <script>
 
     function getQueryVariable(variable)
@@ -65,7 +72,7 @@
         var vars = query.split("&");
         for (var i=0;i<vars.length;i++) {
             var pair = vars[i].split("=");
-            if(pair[0] == variable){return pair[1];}
+            if(pair[0] === variable){return pair[1];}
         }
         return(false);
     }
@@ -76,18 +83,25 @@
             title: '',
             author: '',
             createTime: '',
-            content: ''
+            content: '',
+            viewCount: '',
+            digCount: ''
         },
         methods: {
             blog: function () {
                 console.log("blog");
-                var that = this;
-                var id = getQueryVariable("id");
+                const that = this;
+                const id = getQueryVariable("id");
                 axios.get('http://localhost:8081/blog/'+id, {}).then(function (response) {
-                    that.title = response.data.title;
-                    that.author = response.data.author;
-                    that.createTime = response.data.createTime;
-                    that.content = marked(response.data.content);
+                    that.title = response.data.result.title;
+                    that.author = response.data.result.author;
+                    that.createTime = response.data.result.createTime;
+                    that.viewCount = response.data.result.viewCount;
+                    that.digCount = response.data.result.digCount;
+                    let content = ''
+                    content = response.data.result.content.replace(/\\r\\n/g,"\n")
+
+                    that.content = marked(content)
                 })
             }
         },
