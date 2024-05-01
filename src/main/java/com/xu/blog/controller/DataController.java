@@ -41,9 +41,9 @@ public class DataController {
         return Result.ok(mysqlBlogRepository.queryAll());
     }
 
-    @PostMapping("/search")
+    @GetMapping("/search")
     @ApiOperation("检索，目前支持es")
-    public Result<Map<String, Object>> search(@RequestParam String keyword) {
+    public Result<Map<String, Object>> search(@RequestParam("keyword") String keyword) {
         Map<String, Object> map = new HashMap<>();
         // 统计耗时
         StopWatch watch = new StopWatch();
