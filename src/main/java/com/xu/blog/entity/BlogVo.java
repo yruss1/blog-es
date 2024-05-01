@@ -1,13 +1,20 @@
 package com.xu.blog.entity;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * @author 11582
  */
+@ApiModel("博客实体")
 public class BlogVo {
-
+    @ApiModelProperty("博客标题")
     private String title;
+    @ApiModelProperty("概括")
     private String summary;
+    @ApiModelProperty("作者")
     private String author;
+    @ApiModelProperty("内容")
     private String content;
 
     public String getTitle() {

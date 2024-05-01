@@ -1,5 +1,8 @@
 package com.xu.blog.common;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 
 /**
@@ -7,15 +10,21 @@ import java.io.Serializable;
  * @author 11582
  * @date 2024/3/18  18:22
  */
+@ApiModel("结果返回包装类")
 public class Result<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static final int successCode = 200;
     private static final int errorCode = 500;
+    @ApiModelProperty("标识")
     private Boolean flag = true;
+    @ApiModelProperty("返回提示信息")
     private String message = "操作成功！";
+    @ApiModelProperty("返回状态码")
     private Integer code = 0;
+    @ApiModelProperty("返回结果")
     private T result;
+    @ApiModelProperty("返回时间")
     private long timestamp = System.currentTimeMillis();
 
     private Result() {

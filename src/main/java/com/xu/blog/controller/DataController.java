@@ -6,6 +6,8 @@ import com.xu.blog.entity.es.EsBlog;
 import com.xu.blog.entity.mysql.MysqlBlog;
 import com.xu.blog.repository.EsBlogRepository;
 import com.xu.blog.repository.MysqlBlogRepository;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -24,6 +26,7 @@ import java.util.Optional;
  */
 @RestController
 @Slf4j
+@Api("检索模块")
 public class DataController {
     private static final String MYSQL = "mysql";
     private static final String ES = "es";
@@ -37,11 +40,13 @@ public class DataController {
 
 
     @GetMapping("/blogs")
+    @ApiOperation("通过mysql获取全部博客")
     public Result<List<MysqlBlog>> blogList() {
         return Result.ok(mysqlBlogRepository.queryAll());
     }
 
     @PostMapping("/search")
+    @ApiOperation("检索，目前支持es")
     public Result<Map<String, Object>> search(@RequestBody Param param) {
         Map<String, Object> map = new HashMap<>();
         // 统计耗时
@@ -74,6 +79,7 @@ public class DataController {
     }
 
     @GetMapping("/blog/{id}")
+    @ApiOperation("查看具体博文")
     public Result<Object> blog(@PathVariable String id) {
         Optional<MysqlBlog> byId = mysqlBlogRepository.findById(id);
         return byId.<Result<Object>>map(Result::ok).orElseGet(() -> Result.error("博客不存在！"));

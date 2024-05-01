@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService {
             UserDto userDto = new UserDto();
             userDto.setUserName(user.getUserName());
             userDto.setId(user.getId());
+            userDto.setOrganization(user.getOrganization());
             userDto.setIdentityType(user.getIdentityType());
             userDto.setBlogList(blogRepository.findByAuthor(user.getUserName()));
             userDto.setQuestList(questRepository.findQuestByExpertId(user.getId()));

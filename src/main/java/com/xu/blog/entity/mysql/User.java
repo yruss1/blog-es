@@ -24,5 +24,7 @@ public class User {
     private String password;
     @Column(name = "identity_type")
     private String identityType;
+    @Column(name = "organization")
+    private String organization;
 
 }
