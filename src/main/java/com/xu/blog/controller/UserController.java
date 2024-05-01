@@ -6,9 +6,9 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import com.xu.blog.common.Result;
 import com.xu.blog.entity.BlogVo;
+import com.xu.blog.entity.CommentVo;
 import com.xu.blog.entity.QuestVo;
 import com.xu.blog.entity.UserDto;
-import com.xu.blog.entity.mysql.Comment;
 import com.xu.blog.entity.mysql.User;
 import com.xu.blog.service.BlogService;
 import com.xu.blog.service.QuestService;
@@ -91,8 +91,8 @@ public class UserController {
     @SaCheckLogin
     @PostMapping("/quest/comment")
     @ApiOperation("发布评论")
-    public Result<String> comment(@RequestBody Comment comment){
-        questService.comment(comment);
+    public Result<String> comment(@RequestBody CommentVo commentVo){
+        questService.comment(commentVo);
         return Result.ok();
     }
 

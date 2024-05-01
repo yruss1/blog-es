@@ -1,14 +1,12 @@
 package com.xu.blog.controller;
 
 import com.xu.blog.common.Result;
-import com.xu.blog.common.exception.BusinessException;
 import com.xu.blog.entity.es.EsBlog;
 import com.xu.blog.entity.mysql.MysqlBlog;
 import com.xu.blog.repository.EsBlogRepository;
 import com.xu.blog.repository.MysqlBlogRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -28,8 +26,6 @@ import java.util.Optional;
 @Slf4j
 @Api("检索模块")
 public class DataController {
-    private static final String MYSQL = "mysql";
-    private static final String ES = "es";
     private final MysqlBlogRepository mysqlBlogRepository;
     private final EsBlogRepository esBlogRepository;
 
@@ -47,30 +43,19 @@ public class DataController {
 
     @PostMapping("/search")
     @ApiOperation("检索，目前支持es")
-    public Result<Map<String, Object>> search(@RequestBody Param param) {
+    public Result<Map<String, Object>> search(@RequestParam String keyword) {
         Map<String, Object> map = new HashMap<>();
         // 统计耗时
         StopWatch watch = new StopWatch();
         watch.start();
-        String type = param.getType();
-        // mysql 的搜索
-        if (MYSQL.equals(type)) {
-            List<MysqlBlog> mysqlBlogs = mysqlBlogRepository.queryBlog(param.getKeyword());
-            map.put("list", mysqlBlogs);
-            // es 的搜索
-        } else if (ES.equals(type)) {
-            BoolQueryBuilder builder = QueryBuilders.boolQuery();
-            builder.should(QueryBuilders.matchPhraseQuery("title", param.getKeyword()));
-            builder.should(QueryBuilders.matchPhraseQuery("content", param.getKeyword()));
-            String s = builder.toString();
-            log.info("s={}", s);
-            Page<EsBlog> search = (Page<EsBlog>) esBlogRepository.search(builder);
-            List<EsBlog> content = search.getContent();
-            map.put("list", content);
 
-        } else {
-            throw new BusinessException("错误的搜索类型！请检查");
-        }
+        BoolQueryBuilder builder = QueryBuilders.boolQuery();
+        builder.should(QueryBuilders.matchPhraseQuery("title", keyword));
+        builder.should(QueryBuilders.matchPhraseQuery("content", keyword));
+        Page<EsBlog> search = (Page<EsBlog>) esBlogRepository.search(builder);
+        List<EsBlog> content = search.getContent();
+        map.put("list", content);
+
         watch.stop();
         // 计算耗时
         long millis = watch.getTotalTimeMillis();
@@ -85,10 +70,4 @@ public class DataController {
         return byId.<Result<Object>>map(Result::ok).orElseGet(() -> Result.error("博客不存在！"));
     }
 
-
-    @Data
-    private static class Param {
-        private String type;
-        private String keyword;
-    }
 }

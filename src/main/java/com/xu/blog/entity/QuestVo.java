@@ -8,26 +8,15 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel("问题实体")
 public class QuestVo {
-    @ApiModelProperty("问题id")
-    private Integer id;
+
     @ApiModelProperty("用户id")
     private String userId;
     @ApiModelProperty("专家id")
     private String expertId;
     @ApiModelProperty("问题信息")
     private String message;
-    @ApiModelProperty("发布时间")
-    private Long time;
 
     public QuestVo() {
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getUserId() {
@@ -54,19 +43,9 @@ public class QuestVo {
         this.message = message;
     }
 
-    public Long getTime() {
-        return time;
-    }
-
-    public void setTime(Long time) {
-        this.time = time;
-    }
-
-    public QuestVo(Integer id, String userId, String expertId, String message, Long time) {
-        this.id = id;
+    public QuestVo(String userId, String expertId, String message) {
         this.userId = userId;
         this.expertId = expertId;
         this.message = message;
-        this.time = time;
     }
 }
