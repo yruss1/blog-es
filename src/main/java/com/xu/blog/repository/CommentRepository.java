@@ -19,4 +19,11 @@ public interface CommentRepository extends JpaRepository<Comment, String> {
      */
     List<Comment> findCommentByUserId(String id);
 
+    /**
+     * 根据博客id查找所有评论
+     * @param blogId 博客id
+     * @return 所有评论
+     */
+    List<Comment> findCommentByBlogId(String blogId);
+
 }

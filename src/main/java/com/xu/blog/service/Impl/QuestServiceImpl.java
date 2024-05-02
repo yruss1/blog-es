@@ -1,7 +1,7 @@
 package com.xu.blog.service.Impl;
 
-import com.xu.blog.entity.CommentVo;
-import com.xu.blog.entity.QuestVo;
+import com.xu.blog.entity.vo.CommentVo;
+import com.xu.blog.entity.vo.QuestVo;
 import com.xu.blog.entity.mysql.Comment;
 import com.xu.blog.entity.mysql.Quest;
 import com.xu.blog.repository.CommentRepository;

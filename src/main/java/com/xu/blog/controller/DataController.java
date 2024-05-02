@@ -1,73 +1,55 @@
 package com.xu.blog.controller;
 
 import com.xu.blog.common.Result;
-import com.xu.blog.entity.es.EsBlog;
+import com.xu.blog.entity.dto.BlogDto;
 import com.xu.blog.entity.mysql.MysqlBlog;
-import com.xu.blog.repository.EsBlogRepository;
-import com.xu.blog.repository.MysqlBlogRepository;
+import com.xu.blog.service.BlogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.springframework.data.domain.Page;
-import org.springframework.util.StopWatch;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * @author 11582
  */
 @RestController
-@Slf4j
 @Api("检索模块")
 public class DataController {
-    private final MysqlBlogRepository mysqlBlogRepository;
-    private final EsBlogRepository esBlogRepository;
 
-    public DataController(MysqlBlogRepository mysqlBlogRepository, EsBlogRepository esBlogRepository) {
-        this.mysqlBlogRepository = mysqlBlogRepository;
-        this.esBlogRepository = esBlogRepository;
+    private final BlogService blogService;
+
+    public DataController(BlogService blogService) {
+        this.blogService = blogService;
     }
 
 
     @GetMapping("/blogs")
     @ApiOperation("通过mysql获取全部博客")
     public Result<List<MysqlBlog>> blogList() {
-        return Result.ok(mysqlBlogRepository.queryAll());
+        return Result.ok(blogService.selectAll());
     }
 
     @GetMapping("/search")
     @ApiOperation("检索，目前支持es")
-    public Result<Map<String, Object>> search(@RequestParam("keyword") String keyword) {
-        Map<String, Object> map = new HashMap<>();
-        // 统计耗时
-        StopWatch watch = new StopWatch();
-        watch.start();
+    public Result<Map<String, Object>> search(@RequestParam("keyword") String keyword,
+                                              @RequestParam("pageNum") int pageNum,
+                                              @RequestParam("pageSize") int pageSize) {
 
-        BoolQueryBuilder builder = QueryBuilders.boolQuery();
-        builder.should(QueryBuilders.matchPhraseQuery("title", keyword));
-        builder.should(QueryBuilders.matchPhraseQuery("content", keyword));
-        Page<EsBlog> search = (Page<EsBlog>) esBlogRepository.search(builder);
-        List<EsBlog> content = search.getContent();
-        map.put("list", content);
-
-        watch.stop();
-        // 计算耗时
-        long millis = watch.getTotalTimeMillis();
-        map.put("duration", millis);
-        return Result.ok(map);
+        return Result.ok(blogService.search(keyword, pageNum, pageSize));
     }
 
-    @GetMapping("/blog/{id}")
+    @GetMapping("/blog")
     @ApiOperation("查看具体博文")
-    public Result<Object> blog(@PathVariable String id) {
-        Optional<MysqlBlog> byId = mysqlBlogRepository.findById(id);
-        return byId.<Result<Object>>map(Result::ok).orElseGet(() -> Result.error("博客不存在！"));
+    public Result<BlogDto> blog(@RequestParam("id") String id) {
+        BlogDto blogDto = blogService.selectById(id);
+        if (blogDto != null){
+            return Result.ok(blogDto);
+        }
+        return Result.error("博客不存在！");
     }
 
 }

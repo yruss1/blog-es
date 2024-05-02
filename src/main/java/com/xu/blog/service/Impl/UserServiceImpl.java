@@ -1,7 +1,7 @@
 package com.xu.blog.service.Impl;
 
 import com.xu.blog.common.exception.BusinessException;
-import com.xu.blog.entity.UserDto;
+import com.xu.blog.entity.dto.UserDto;
 import com.xu.blog.entity.mysql.User;
 import com.xu.blog.repository.CommentRepository;
 import com.xu.blog.repository.MysqlBlogRepository;

@@ -1,4 +1,4 @@
-package com.xu.blog.entity;
+package com.xu.blog.entity.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

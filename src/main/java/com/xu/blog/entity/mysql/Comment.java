@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * @author 11582
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Data
 @Table(name = "t_comment")
 @Entity
-public class Comment {
+public class Comment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "simple-uuid")
@@ -26,5 +27,9 @@ public class Comment {
     private String message;
     @Column(name = "time")
     private Long time;
+    @Column(name = "blog_id")
+    private String blogId;
+    @Column(name = "parent_id")
+    private Integer parentId;
 
 }

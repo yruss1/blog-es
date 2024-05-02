@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @author 11582
  */
 @Data
-@Document(indexName = "blog", type = "doc", useServerConfiguration = true, createIndex = false)
+@Document(indexName = "blog1", type = "doc", useServerConfiguration = true, createIndex = false)
 public class EsBlog implements Serializable {
 
     @Id
@@ -23,7 +23,7 @@ public class EsBlog implements Serializable {
     private String title;
     @Field(type = FieldType.Text, analyzer = "ik_smart_word")
     private String author;
-    @Field(type = FieldType.Text, analyzer = "ik_smart_word")
+    @Field(type = FieldType.Text, analyzer = "ik_smart_word", fielddata = true)
     private String content;
     @Field(type = FieldType.Date, format = DateFormat.basic_date_time)
     @JsonProperty("create_time")

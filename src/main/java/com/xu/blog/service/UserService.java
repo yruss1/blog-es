@@ -1,6 +1,6 @@
 package com.xu.blog.service;
 
-import com.xu.blog.entity.UserDto;
+import com.xu.blog.entity.dto.UserDto;
 import com.xu.blog.entity.mysql.User;
 
 /**

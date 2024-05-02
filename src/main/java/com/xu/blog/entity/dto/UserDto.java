@@ -1,4 +1,4 @@
-package com.xu.blog.entity;
+package com.xu.blog.entity.dto;
 
 import com.xu.blog.entity.mysql.Comment;
 import com.xu.blog.entity.mysql.MysqlBlog;

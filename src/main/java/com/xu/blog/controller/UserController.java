@@ -5,10 +5,10 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import com.xu.blog.common.Result;
-import com.xu.blog.entity.BlogVo;
-import com.xu.blog.entity.CommentVo;
-import com.xu.blog.entity.QuestVo;
-import com.xu.blog.entity.UserDto;
+import com.xu.blog.entity.vo.BlogVo;
+import com.xu.blog.entity.vo.CommentVo;
+import com.xu.blog.entity.vo.QuestVo;
+import com.xu.blog.entity.dto.UserDto;
 import com.xu.blog.entity.mysql.User;
 import com.xu.blog.service.BlogService;
 import com.xu.blog.service.QuestService;
@@ -34,7 +34,9 @@ public class UserController {
     private final BlogService blogService;
     private final QuestService questService;
 
-    public UserController(UserService userService, BlogService blogService, QuestService questService) {
+    public UserController(UserService userService,
+                          BlogService blogService,
+                          QuestService questService) {
         this.userService = userService;
         this.blogService = blogService;
         this.questService = questService;
@@ -44,7 +46,8 @@ public class UserController {
     @ApiOperation("用户登录")
     public SaResult doLogin(@RequestBody Map<String, String> map){
         User user = userService.doLogin(map.get(USER_NAME));
-        if (map.get(PASSWORD).equals(user.getPassword())){
+        if (user != null
+                && map.get(PASSWORD).equals(user.getPassword())){
             StpUtil.login(user.getId());
             return SaResult.data(StpUtil.getTokenInfo());
         }
@@ -68,8 +71,8 @@ public class UserController {
     @SaCheckLogin
     @GetMapping("/info")
     @ApiOperation("获取用户信息")
-    public Result<UserDto> userInfo(@RequestParam String id){
-        return Result.ok(userService.userInfo(id));
+    public Result<UserDto> userInfo(){
+        return Result.ok(userService.userInfo(StpUtil.getLoginIdAsString()));
     }
 
     @SaCheckLogin

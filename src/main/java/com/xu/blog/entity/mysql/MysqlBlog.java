@@ -1,6 +1,6 @@
 package com.xu.blog.entity.mysql;
 
-import com.xu.blog.entity.BlogVo;
+import com.xu.blog.entity.vo.BlogVo;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 

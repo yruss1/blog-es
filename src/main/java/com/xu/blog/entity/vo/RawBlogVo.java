@@ -1,4 +1,4 @@
-package com.xu.blog.entity;
+package com.xu.blog.entity.vo;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 @Data
 @AllArgsConstructor@NoArgsConstructor
-public class RawBlog implements Serializable {
+public class RawBlogVo implements Serializable {
     @SerializedName("Id")
     private String id;
     @SerializedName("Title")

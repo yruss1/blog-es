@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.xu.blog.common.util.GsonUtil;
 import com.xu.blog.common.util.HtmlUtils;
-import com.xu.blog.entity.RawBlog;
+import com.xu.blog.entity.vo.RawBlogVo;
 import com.xu.blog.entity.mysql.MysqlBlog;
 import com.xu.blog.repository.MysqlBlogRepository;
 import com.xu.blog.task.restApi.BlogRestClient;
@@ -66,12 +66,12 @@ public class BlogApiTask {
                                     JsonArray.class
                             );
                             for (JsonElement jsonElement : jsonArray){
-                                RawBlog rawBlog = GsonUtil.fromJson(
+                                RawBlogVo rawBlogVo = GsonUtil.fromJson(
                                         GsonUtil.toJsonString(jsonElement),
-                                        RawBlog.class
+                                        RawBlogVo.class
                                 );
                                 client.getArticleById(
-                                        rawBlog.getId(),
+                                        rawBlogVo.getId(),
                                         token,
                                         response2 -> {
                                             MysqlBlog blog = new MysqlBlog();
@@ -80,19 +80,19 @@ public class BlogApiTask {
                                             SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                             Date d = null;
                                             try {
-                                                d = sdf.parse(rawBlog.getCreateTime());
+                                                d = sdf.parse(rawBlogVo.getCreateTime());
                                             } catch (ParseException e) {
                                                 e.printStackTrace();
                                             }
                                             String formattedTime = output.format(d);
                                             blog.setCreateTime(formattedTime);
                                             blog.setUpdateTime(formattedTime);
-                                            blog.setId(rawBlog.getId());
-                                            blog.setTitle(rawBlog.getTitle());
-                                            blog.setSummary(rawBlog.getSummary());
-                                            blog.setAuthor(rawBlog.getAuthor());
-                                            blog.setViewCount(rawBlog.getViewCount());
-                                            blog.setDigCount(rawBlog.getDiggCount());
+                                            blog.setId(rawBlogVo.getId());
+                                            blog.setTitle(rawBlogVo.getTitle());
+                                            blog.setSummary(rawBlogVo.getSummary());
+                                            blog.setAuthor(rawBlogVo.getAuthor());
+                                            blog.setViewCount(rawBlogVo.getViewCount());
+                                            blog.setDigCount(rawBlogVo.getDiggCount());
                                             map.put(blog.getId(), blog);
                                             logger.info("{}",blog);
                                         });

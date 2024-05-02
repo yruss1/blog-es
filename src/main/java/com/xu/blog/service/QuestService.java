@@ -1,7 +1,7 @@
 package com.xu.blog.service;
 
-import com.xu.blog.entity.CommentVo;
-import com.xu.blog.entity.QuestVo;
+import com.xu.blog.entity.vo.CommentVo;
+import com.xu.blog.entity.vo.QuestVo;
 
 /**
  * @author 11582
