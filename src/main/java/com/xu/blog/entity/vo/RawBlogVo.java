@@ -14,7 +14,7 @@ import java.io.Serializable;
 @AllArgsConstructor@NoArgsConstructor
 public class RawBlogVo implements Serializable {
     @SerializedName("Id")
-    private String id;
+    private Integer id;
     @SerializedName("Title")
     private String title;
     @SerializedName("Summary")
@@ -22,9 +22,9 @@ public class RawBlogVo implements Serializable {
     @SerializedName("Author")
     private String author;
     @SerializedName("ViewCount")
-    private String viewCount;
+    private Integer viewCount;
     @SerializedName("DiggCount")
-    private String diggCount;
+    private Integer diggCount;
     @SerializedName("DateAdded")
     private String createTime;
 

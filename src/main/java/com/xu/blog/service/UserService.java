@@ -21,7 +21,7 @@ public interface UserService {
      * @param id 用户id
      * @return 用户信息实体
      */
-    UserDto userInfo(String id);
+    UserDto userInfo(Long id);
 
     /**
      * 返回字符串

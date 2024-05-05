@@ -88,7 +88,7 @@ public class UserController {
     @GetMapping("/info")
     @ApiOperation("获取用户信息")
     public Result<UserDto> userInfo(){
-        return Result.ok(userService.userInfo(StpUtil.getLoginIdAsString()));
+        return Result.ok(userService.userInfo(StpUtil.getLoginIdAsLong()));
     }
 
     @SaCheckLogin
@@ -105,7 +105,7 @@ public class UserController {
     public Result<String> questNew(@RequestBody QuestVo questVo){
         int res = questService.questNew(questVo);
         if (res == 0){
-            return Result.error("发布失败");
+            return Result.error("发布失败,请检查参数！");
         }
         return Result.ok(String.valueOf(res));
     }
@@ -121,8 +121,7 @@ public class UserController {
     @PostMapping("/quest/comment")
     @ApiOperation("发布评论")
     public Result<String> comment(@RequestBody CommentVo commentVo){
-        questService.comment(commentVo);
-        return Result.ok();
+        return Result.info(questService.comment(commentVo));
     }
 
 }

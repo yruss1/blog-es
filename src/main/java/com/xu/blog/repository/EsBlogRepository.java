@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
  * @author 11582
  */
 @Repository
-public interface EsBlogRepository extends ElasticsearchRepository<EsBlog, String> {
+public interface EsBlogRepository extends ElasticsearchRepository<EsBlog, Long> {
 }

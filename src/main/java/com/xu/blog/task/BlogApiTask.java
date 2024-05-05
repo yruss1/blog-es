@@ -39,7 +39,7 @@ public class BlogApiTask {
     @Value("${blog.clientSecret}")
     public String clientSecret;
     private static final Logger logger = LoggerFactory.getLogger(BlogApiTask.class);
-    private final ConcurrentHashMap<String, MysqlBlog> map = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Integer, MysqlBlog> map = new ConcurrentHashMap<>();
     private final MysqlBlogRepository mysqlBlogRepository;
 
     public BlogApiTask(MysqlBlogRepository mysqlBlogRepository) {
@@ -71,7 +71,7 @@ public class BlogApiTask {
                                         RawBlogVo.class
                                 );
                                 client.getArticleById(
-                                        rawBlogVo.getId(),
+                                        String.valueOf(rawBlogVo.getId()),
                                         token,
                                         response2 -> {
                                             MysqlBlog blog = new MysqlBlog();

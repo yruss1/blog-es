@@ -10,20 +10,27 @@ import java.util.List;
  * @author 11582
  */
 @Repository
-public interface QuestRepository extends JpaRepository<Quest, String> {
+public interface QuestRepository extends JpaRepository<Quest, Integer> {
 
     /**
-     * 根据专家id找对应的问题
-     * @param receiverId 专家id
+     * 根据专家id找对应的问题已回复
+     * @param receiverName 专家用户名
      * @return 和专家相关的问题列表
      */
-    List<Quest> findQuestByReceiverId(String receiverId);
+    List<Quest> findQuestByReceiverNameAndReplyMessageIsNotNull(String receiverName);
+
+    /**
+     * 根据专家id找对应的问题 未回复
+     * @param receiverName 专家用户名
+     * @return 和专家相关的问题列表
+     */
+    List<Quest> findQuestByReceiverNameAndReplyMessageIsNull(String receiverName);
 
     /**
      * 根据提问者id获取问题
-     * @param senderId 提问者id
+     * @param senderName 提问者用户名
      * @return 问题列表
      */
-    List<Quest> findQuestBySenderId(String senderId);
+    List<Quest> findQuestBySenderName(String senderName);
 
 }

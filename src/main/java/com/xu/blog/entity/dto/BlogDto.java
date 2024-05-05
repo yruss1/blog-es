@@ -10,8 +10,8 @@ public class BlogDto {
     private String title;
     private String summary;
     private String author;
-    private String viewCount;
-    private String digCount;
+    private Integer viewCount;
+    private Integer digCount;
     private String content;
     private String createTime;
     private String updateTime;
@@ -41,19 +41,19 @@ public class BlogDto {
         this.author = author;
     }
 
-    public String getViewCount() {
+    public Integer getViewCount() {
         return viewCount;
     }
 
-    public void setViewCount(String viewCount) {
+    public void setViewCount(Integer viewCount) {
         this.viewCount = viewCount;
     }
 
-    public String getDigCount() {
+    public Integer getDigCount() {
         return digCount;
     }
 
-    public void setDigCount(String digCount) {
+    public void setDigCount(Integer digCount) {
         this.digCount = digCount;
     }
 

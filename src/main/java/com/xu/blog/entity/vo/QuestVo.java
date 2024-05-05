@@ -9,20 +9,29 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel("问题实体")
 public class QuestVo {
 
-    @ApiModelProperty("专家id")
-    private String receiverId;
+
+    @ApiModelProperty("用户名")
+    private String senderName;
+    @ApiModelProperty("专家名")
+    private String receiverName;
     @ApiModelProperty("问题信息")
     private String sendMessage;
 
     public QuestVo() {
     }
-
-    public String getReceiverId() {
-        return receiverId;
+    public String getSenderName() {
+        return senderName;
     }
 
-    public void setReceiverId(String receiverId) {
-        this.receiverId = receiverId;
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
     }
 
     public String getSendMessage() {
@@ -33,8 +42,4 @@ public class QuestVo {
         this.sendMessage = sendMessage;
     }
 
-    public QuestVo(String receiverId, String sendMessage) {
-        this.receiverId = receiverId;
-        this.sendMessage = sendMessage;
-    }
 }

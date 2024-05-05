@@ -9,26 +9,26 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel("回复实体")
 public class ReplyVo {
     @ApiModelProperty("问题id")
-    private String id;
-    @ApiModelProperty("专家id")
-    private String receiverId;
+    private Integer id;
+    @ApiModelProperty("专家名")
+    private String receiverName;
     @ApiModelProperty("回复信息")
     private String replyMessage;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getReceiverId() {
-        return receiverId;
+    public String getReceiverName() {
+        return receiverName;
     }
 
-    public void setReceiverId(String receiverId) {
-        this.receiverId = receiverId;
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
     }
 
     public String getReplyMessage() {

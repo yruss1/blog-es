@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto userInfo(String id) {
+    public UserDto userInfo(Long id) {
         Optional<User> byId = userRepository.findById(id);
         if(byId.isPresent()){
             User user = byId.get();
@@ -47,9 +47,10 @@ public class UserServiceImpl implements UserService {
             userDto.setId(user.getId());
             userDto.setOrganization(user.getOrganization());
             userDto.setBlogList(blogRepository.findByAuthor(user.getUserName()));
-            userDto.setQuestList(questRepository.findQuestBySenderId(user.getId()));
-            userDto.setReplyList(questRepository.findQuestByReceiverId(user.getId()));
+            userDto.setQuestList(questRepository.findQuestBySenderName(user.getUserName()));
             userDto.setCommentList(commentRepository.findCommentByUserId(user.getId()));
+            userDto.setReplyList(questRepository.findQuestByReceiverNameAndReplyMessageIsNotNull(user.getUserName()));
+            userDto.setReceiveQuestList(questRepository.findQuestByReceiverNameAndReplyMessageIsNull(user.getUserName()));
             return userDto;
         }else {
             throw new BusinessException("用户不存在，请检查！");

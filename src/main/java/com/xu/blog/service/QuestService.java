@@ -21,7 +21,7 @@ public interface QuestService {
      * @param comment 评论对象
      * @return 是否成功
      */
-    void comment(CommentVo comment);
+    String comment(CommentVo comment);
 
     /**
      * 回复

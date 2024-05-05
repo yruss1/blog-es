@@ -17,7 +17,7 @@ public class CommentDto implements Serializable {
     private Integer pid;
 
     @ApiModelProperty("评论用户id")
-    private String userId;
+    private Long userId;
 
     @ApiModelProperty("评论内容")
     private String message;
@@ -52,11 +52,11 @@ public class CommentDto implements Serializable {
         this.pid = pid;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

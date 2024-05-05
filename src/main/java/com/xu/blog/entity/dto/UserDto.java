@@ -14,7 +14,7 @@ import java.util.List;
 @ApiModel("用户信息实体类")
 public class UserDto {
     @ApiModelProperty("用户id")
-    private String id;
+    private Long id;
     @ApiModelProperty("用户名")
     private String userName;
     @ApiModelProperty("用户组织")
@@ -27,6 +27,16 @@ public class UserDto {
     private List<MysqlBlog> blogList;
     @ApiModelProperty("用户评论历史")
     private List<Comment> commentList;
+    @ApiModelProperty("用户收到的提问历史")
+    private List<Quest> receiveQuestList;
+
+    public List<Quest> getReceiveQuestList() {
+        return receiveQuestList;
+    }
+
+    public void setReceiveQuestList(List<Quest> receiveQuestList) {
+        this.receiveQuestList = receiveQuestList;
+    }
 
     public List<Quest> getReplyList() {
         return replyList;
@@ -44,11 +54,11 @@ public class UserDto {
         this.organization = organization;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

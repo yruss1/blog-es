@@ -9,35 +9,48 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel("评论实体")
 public class CommentVo {
 
-    @ApiModelProperty("问题id")
-    private String questId;
+    @ApiModelProperty("博客id")
+    private Integer blogId;
     @ApiModelProperty("用户id")
-    private String userId;
+    private Long userId;
     @ApiModelProperty("评论内容")
     private String message;
+    @ApiModelProperty("父评论id")
+    private Integer parentId;
 
-    public String getQuestId() {
-        return questId;
+    public void setBlogId(Integer blogId) {
+        this.blogId = blogId;
+    }
+
+    public Integer getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
+    }
+
+
+
+    public Integer getBlogId() {
+        return blogId;
     }
 
     public CommentVo() {
     }
 
-    public CommentVo(String questId, String userId, String message) {
-        this.questId = questId;
+    public CommentVo(Integer blogId, Long userId, String message) {
+        this.blogId = blogId;
         this.userId = userId;
         this.message = message;
     }
 
-    public void setQuestId(String questId) {
-        this.questId = questId;
-    }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

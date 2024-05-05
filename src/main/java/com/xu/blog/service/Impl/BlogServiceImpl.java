@@ -82,7 +82,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public BlogDto selectById(String id) {
+    public BlogDto selectById(Integer id) {
         Optional<MysqlBlog> byId = mysqlBlogRepository.findById(id);
         if (byId.isPresent()){
             BlogDto blogDto = new BlogDto();

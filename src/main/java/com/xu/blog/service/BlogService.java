@@ -1,8 +1,8 @@
 package com.xu.blog.service;
 
 import com.xu.blog.entity.dto.BlogDto;
-import com.xu.blog.entity.vo.BlogVo;
 import com.xu.blog.entity.mysql.MysqlBlog;
+import com.xu.blog.entity.vo.BlogVo;
 
 import java.util.List;
 import java.util.Map;
@@ -40,6 +40,6 @@ public interface BlogService {
      * @param id 博客id
      * @return 博客信息
      */
-    BlogDto selectById(String id);
+    BlogDto selectById(Integer id);
 
 }

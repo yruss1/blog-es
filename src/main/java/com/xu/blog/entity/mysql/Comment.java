@@ -1,7 +1,6 @@
 package com.xu.blog.entity.mysql;
 
 import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,20 +14,19 @@ import java.io.Serializable;
 public class Comment implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "simple-uuid")
-    @GenericGenerator(name = "simple-uuid", strategy = "com.xu.blog.common.config.SimpleUuidGenerator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
     @Column(name = "quest_id")
-    private String questId;
+    private Integer questId;
     @Column(name = "user_id")
-    private String userId;
+    private Long userId;
     @Column(name = "message")
     private String message;
     @Column(name = "time")
-    private Long time;
+    private String time;
     @Column(name = "blog_id")
-    private String blogId;
+    private Integer blogId;
     @Column(name = "parent_id")
     private Integer parentId;
 

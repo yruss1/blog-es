@@ -1,10 +1,10 @@
 package com.xu.blog.common.config;
 
-import com.xu.blog.entity.mysql.MysqlBlog;
 import com.xu.blog.common.util.GsonUtil;
-import org.apache.commons.lang3.StringUtils;
+import com.xu.blog.entity.mysql.MysqlBlog;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.id.Assigned;
 import org.hibernate.id.IdentifierGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,20 +20,20 @@ public class SimpleUuidGenerator implements IdentifierGenerator {
 
     @Override
     public Serializable generate(SharedSessionContractImplementor sharedSessionContractImplementor, Object o) throws HibernateException {
-        //如果主键有值，则用实体自带的主键值;否则使用guid生成策略
+
         try {
             MysqlBlog mysqlBlog = GsonUtil.fromJson(GsonUtil.toJsonString(o), MysqlBlog.class);
             if (mysqlBlog.getId() != null) {
-                String idStringValue = mysqlBlog.getId();
-                if (StringUtils.isNotBlank(idStringValue)) {
-                    return idStringValue;
+                Integer id = mysqlBlog.getId();
+                if (id > 0) {
+                    return id;
                 }
             }
         } catch (Exception e) {
             logger.error("Error occured when get or set id value.", e);
         }
 
-        return null;
+        return new Assigned().generate(sharedSessionContractImplementor, o);
     }
 }
 

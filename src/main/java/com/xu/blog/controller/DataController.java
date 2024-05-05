@@ -45,7 +45,7 @@ public class DataController {
 
     @GetMapping("/blog/{id}")
     @ApiOperation("查看具体博文")
-    public Result<BlogDto> blog(@PathVariable("id") String id) {
+    public Result<BlogDto> blog(@PathVariable("id") Integer id) {
         BlogDto blogDto = blogService.selectById(id);
         if (blogDto != null){
             return Result.ok(blogDto);

@@ -12,7 +12,7 @@ import java.util.List;
  * @author 11582
  */
 @Repository
-public interface MysqlBlogRepository extends JpaRepository<MysqlBlog, String> {
+public interface MysqlBlogRepository extends JpaRepository<MysqlBlog, Integer> {
 
     /**
      * 创建时间倒序查询博客
