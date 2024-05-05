@@ -7,6 +7,7 @@ import com.xu.blog.service.BlogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,9 +43,9 @@ public class DataController {
         return Result.ok(blogService.search(keyword, pageNum, pageSize));
     }
 
-    @GetMapping("/blog")
+    @GetMapping("/blog/{id}")
     @ApiOperation("查看具体博文")
-    public Result<BlogDto> blog(@RequestParam("id") String id) {
+    public Result<BlogDto> blog(@PathVariable("id") String id) {
         BlogDto blogDto = blogService.selectById(id);
         if (blogDto != null){
             return Result.ok(blogDto);

@@ -5,9 +5,7 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import com.xu.blog.common.Result;
-import com.xu.blog.entity.vo.BlogVo;
-import com.xu.blog.entity.vo.CommentVo;
-import com.xu.blog.entity.vo.QuestVo;
+import com.xu.blog.entity.vo.*;
 import com.xu.blog.entity.dto.UserDto;
 import com.xu.blog.entity.mysql.User;
 import com.xu.blog.service.BlogService;
@@ -15,6 +13,7 @@ import com.xu.blog.service.QuestService;
 import com.xu.blog.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -53,11 +52,28 @@ public class UserController {
         }
         return SaResult.error("登录失败,用户名或密码错误");
     }
+
+    @PostMapping("/register")
+    @ApiOperation("用户注册")
+    public Result<String> register(@RequestBody RegisterVo registerVo){
+        if (!ObjectUtils.isNotEmpty(registerVo)){
+            return Result.error("非法的参数，请检查");
+        }else {
+            return Result.info(userService.doRegister(registerVo));
+        }
+    }
+
+    @GetMapping("/checkUsername/{username}")
+    @ApiOperation("检查用户名是否合法")
+    public Result<String> checkUsername(@PathVariable("username") String username){
+        return Result.info(userService.checkUsername(username));
+    }
+
     @SaCheckLogin
-    @GetMapping("/logout/{id}")
+    @GetMapping("/logout")
     @ApiOperation("用户登出")
-    public SaResult logout(@PathVariable String id){
-        StpUtil.logout(id);
+    public SaResult logout(){
+        StpUtil.logout(StpUtil.getLoginIdAsString());
         return SaResult.ok();
     }
 
@@ -87,8 +103,18 @@ public class UserController {
     @PostMapping("/quest/new")
     @ApiOperation("发布提问")
     public Result<String> questNew(@RequestBody QuestVo questVo){
-        questService.questNew(questVo);
-        return Result.ok();
+        int res = questService.questNew(questVo);
+        if (res == 0){
+            return Result.error("发布失败");
+        }
+        return Result.ok(String.valueOf(res));
+    }
+
+    @SaCheckLogin
+    @PostMapping("/quest/reply")
+    @ApiOperation("回复提问")
+    public Result<String> reply(@RequestBody ReplyVo replyVo){
+        return Result.info(questService.reply(replyVo));
     }
 
     @SaCheckLogin

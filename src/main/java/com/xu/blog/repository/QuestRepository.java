@@ -14,9 +14,16 @@ public interface QuestRepository extends JpaRepository<Quest, String> {
 
     /**
      * 根据专家id找对应的问题
-     * @param expertId 专家id
+     * @param receiverId 专家id
      * @return 和专家相关的问题列表
      */
-    List<Quest> findQuestByExpertId(String expertId);
+    List<Quest> findQuestByReceiverId(String receiverId);
+
+    /**
+     * 根据提问者id获取问题
+     * @param senderId 提问者id
+     * @return 问题列表
+     */
+    List<Quest> findQuestBySenderId(String senderId);
 
 }

@@ -9,43 +9,32 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel("问题实体")
 public class QuestVo {
 
-    @ApiModelProperty("用户id")
-    private String userId;
     @ApiModelProperty("专家id")
-    private String expertId;
+    private String receiverId;
     @ApiModelProperty("问题信息")
-    private String message;
+    private String sendMessage;
 
     public QuestVo() {
     }
 
-    public String getUserId() {
-        return userId;
+    public String getReceiverId() {
+        return receiverId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setReceiverId(String receiverId) {
+        this.receiverId = receiverId;
     }
 
-    public String getExpertId() {
-        return expertId;
+    public String getSendMessage() {
+        return sendMessage;
     }
 
-    public void setExpertId(String expertId) {
-        this.expertId = expertId;
+    public void setSendMessage(String sendMessage) {
+        this.sendMessage = sendMessage;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public QuestVo(String userId, String expertId, String message) {
-        this.userId = userId;
-        this.expertId = expertId;
-        this.message = message;
+    public QuestVo(String receiverId, String sendMessage) {
+        this.receiverId = receiverId;
+        this.sendMessage = sendMessage;
     }
 }

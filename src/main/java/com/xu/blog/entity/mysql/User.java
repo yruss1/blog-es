@@ -22,8 +22,6 @@ public class User {
     private String userName;
     @Column(name = "password")
     private String password;
-    @Column(name = "identity_type")
-    private String identityType;
     @Column(name = "organization")
     private String organization;
 

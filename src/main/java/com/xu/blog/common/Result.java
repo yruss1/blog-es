@@ -13,9 +13,10 @@ import java.io.Serializable;
 @ApiModel("结果返回包装类")
 public class Result<T> implements Serializable {
     private static final long serialVersionUID = 1L;
-
-    private static final int successCode = 200;
-    private static final int errorCode = 500;
+    public static final String FAIL = "失败";
+    public static final String NO = "不";
+    private static final int SUCCESS_CODE = 200;
+    private static final int ERROR_CODE = 500;
     @ApiModelProperty("标识")
     private Boolean flag = true;
     @ApiModelProperty("返回提示信息")
@@ -30,17 +31,29 @@ public class Result<T> implements Serializable {
     private Result() {
     }
 
+    public static <T> Result<T> info(String info) {
+        Result<T> r = new Result<>();
+        r.setFlag(true);
+        if (info.contains(FAIL) || info.contains(NO)){
+            r.setCode(ERROR_CODE);
+        }else {
+            r.setCode(SUCCESS_CODE);
+        }
+        r.setMessage(info);
+        return r;
+    }
+
     public static <T> Result<T> ok() {
         Result<T> r = new Result<>();
         r.setFlag(true);
-        r.setCode(successCode);
+        r.setCode(SUCCESS_CODE);
         return r;
     }
 
     public static <T> Result<T> ok(T data) {
         Result<T> r = new Result<>();
         r.setFlag(true);
-        r.setCode(successCode);
+        r.setCode(SUCCESS_CODE);
         r.setResult(data);
         return r;
     }
@@ -48,14 +61,14 @@ public class Result<T> implements Serializable {
     public static <T> Result<T> ok(T data, String msg) {
         Result<T> r = new Result<>();
         r.setFlag(true);
-        r.setCode(successCode);
+        r.setCode(SUCCESS_CODE);
         r.setResult(data);
         r.setMessage(msg);
         return r;
     }
 
     public static <T> Result<T> error(String msg) {
-        return error(errorCode, msg);
+        return error(ERROR_CODE, msg);
     }
 
     public static <T> Result<T> error(int code, String msg) {

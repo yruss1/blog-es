@@ -18,13 +18,17 @@ public class Quest {
     @GenericGenerator(name = "simple-uuid", strategy = "com.xu.blog.common.config.SimpleUuidGenerator")
     @Column(name = "id")
     private Integer id;
-    @Column(name = "user_id")
-    private String userId;
-    @Column(name = "expert_id")
-    private String expertId;
-    @Column(name = "message")
-    private String message;
-    @Column(name = "time")
-    private Long time;
+    @Column(name = "sender_id")
+    private String senderId;
+    @Column(name = "receiver_id")
+    private String receiverId;
+    @Column(name = "send_message")
+    private String sendMessage;
+    @Column(name = "send_time")
+    private Long sendTime;
+    @Column(name = "reply_message")
+    private String replyMessage;
+    @Column(name = "reply_time")
+    private Long replyTime;
 
 }

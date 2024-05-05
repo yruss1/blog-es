@@ -17,16 +17,25 @@ public class UserDto {
     private String id;
     @ApiModelProperty("用户名")
     private String userName;
-    @ApiModelProperty("用户身份类型")
-    private String identityType;
     @ApiModelProperty("用户组织")
     private String organization;
-    @ApiModelProperty("用户提问历史(普通用户身份)")
+    @ApiModelProperty("用户提问历史")
     private List<Quest> questList;
-    @ApiModelProperty("用户博客历史(专家用户身份)")
+    @ApiModelProperty("用户回复提问历史")
+    private List<Quest> replyList;
+    @ApiModelProperty("用户博客历史")
     private List<MysqlBlog> blogList;
     @ApiModelProperty("用户评论历史")
     private List<Comment> commentList;
+
+    public List<Quest> getReplyList() {
+        return replyList;
+    }
+
+    public void setReplyList(List<Quest> replyList) {
+        this.replyList = replyList;
+    }
+
     public String getOrganization() {
         return organization;
     }
@@ -51,14 +60,6 @@ public class UserDto {
         this.userName = userName;
     }
 
-    public String getIdentityType() {
-        return identityType;
-    }
-
-    public void setIdentityType(String identityType) {
-        this.identityType = identityType;
-    }
-
     public List<Quest> getQuestList() {
         return questList;
     }
@@ -80,15 +81,6 @@ public class UserDto {
     }
 
     public void setCommentList(List<Comment> commentList) {
-        this.commentList = commentList;
-    }
-
-    public UserDto(String id, String userName, String identityType, List<Quest> questList, List<MysqlBlog> blogList, List<Comment> commentList) {
-        this.id = id;
-        this.userName = userName;
-        this.identityType = identityType;
-        this.questList = questList;
-        this.blogList = blogList;
         this.commentList = commentList;
     }
 
