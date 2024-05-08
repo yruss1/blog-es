@@ -5,9 +5,10 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import com.xu.blog.common.Result;
-import com.xu.blog.entity.vo.*;
-import com.xu.blog.entity.dto.UserDto;
+import com.xu.blog.entity.dto.UserInfoDto;
+import com.xu.blog.entity.dto.UserOrgDto;
 import com.xu.blog.entity.mysql.User;
+import com.xu.blog.entity.vo.*;
 import com.xu.blog.service.BlogService;
 import com.xu.blog.service.QuestService;
 import com.xu.blog.service.UserService;
@@ -16,6 +17,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -87,8 +89,25 @@ public class UserController {
     @SaCheckLogin
     @GetMapping("/info")
     @ApiOperation("获取用户信息")
-    public Result<UserDto> userInfo(){
-        return Result.ok(userService.userInfo(StpUtil.getLoginIdAsLong()));
+    public Result<UserInfoDto> userInfo(){
+        UserInfoDto userInfoDto = userService.userInfo(StpUtil.getLoginIdAsLong());
+        if (ObjectUtils.isNotEmpty(userInfoDto)){
+            return Result.ok(userInfoDto);
+        }else {
+            return Result.ok(null,"查询用户信息失败！");
+        }
+    }
+
+    @GetMapping("/infoByUsername/{userName}")
+    @ApiOperation("获取用户信息")
+    public Result<UserInfoDto> infoByUsername(@PathVariable("userName") String userName){
+        UserInfoDto userInfoDto = userService.userInfo(userName);
+        if (ObjectUtils.isNotEmpty(userInfoDto)){
+            return Result.ok(userInfoDto);
+        }else {
+            return Result.ok(null,"查询用户信息失败！");
+        }
+
     }
 
     @SaCheckLogin
@@ -121,7 +140,14 @@ public class UserController {
     @PostMapping("/quest/comment")
     @ApiOperation("发布评论")
     public Result<String> comment(@RequestBody CommentVo commentVo){
-        return Result.info(questService.comment(commentVo));
+        return Result.ok(questService.comment(commentVo));
+    }
+
+    @SaCheckLogin
+    @GetMapping("/organization/{org}")
+    @ApiOperation("查看该用户关系")
+    public Result<List<UserOrgDto>> selectByOrg(@PathVariable("org") String org){
+        return Result.ok(userService.selectByOrg(org, StpUtil.getLoginIdAsLong()));
     }
 
 }

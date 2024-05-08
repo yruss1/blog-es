@@ -38,4 +38,12 @@ public interface MysqlBlogRepository extends JpaRepository<MysqlBlog, Integer> {
      */
     List<MysqlBlog> findByAuthor(String author);
 
+    /**
+     * 根据博客id查找博客标题
+     * @param id 博客id
+     * @return 博客标题
+     */
+    @Query("select e.title from MysqlBlog e where e.id = :id ")
+    String findTitleById(Integer id);
+
 }

@@ -13,8 +13,7 @@ import java.io.Serializable;
 @ApiModel("结果返回包装类")
 public class Result<T> implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String FAIL = "失败";
-    public static final String NO = "不";
+    public static final String SUCCESS = "成功";
     private static final int SUCCESS_CODE = 200;
     private static final int ERROR_CODE = 500;
     @ApiModelProperty("标识")
@@ -34,10 +33,10 @@ public class Result<T> implements Serializable {
     public static <T> Result<T> info(String info) {
         Result<T> r = new Result<>();
         r.setFlag(true);
-        if (info.contains(FAIL) || info.contains(NO)){
-            r.setCode(ERROR_CODE);
-        }else {
+        if (info.contains(SUCCESS)){
             r.setCode(SUCCESS_CODE);
+        }else {
+            r.setCode(ERROR_CODE);
         }
         r.setMessage(info);
         return r;

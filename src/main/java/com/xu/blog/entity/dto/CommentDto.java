@@ -19,8 +19,36 @@ public class CommentDto implements Serializable {
     @ApiModelProperty("评论用户id")
     private Long userId;
 
+    @ApiModelProperty("评论用户名")
+    private String username;
+
     @ApiModelProperty("评论内容")
     private String message;
+
+    @ApiModelProperty("评论时间")
+    private String time;
+
+    @ApiModelProperty("子回复")
+    private List<CommentDto> commentChildList;
+
+    @ApiModelProperty("回复的id")
+    private Integer replyId;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Integer getReplyId() {
+        return replyId;
+    }
+
+    public void setReplyId(Integer replyId) {
+        this.replyId = replyId;
+    }
 
     public String getTime() {
         return time;
@@ -29,12 +57,6 @@ public class CommentDto implements Serializable {
     public void setTime(String time) {
         this.time = time;
     }
-
-    @ApiModelProperty("评论时间")
-    private String time;
-
-    @ApiModelProperty("子回复")
-    private List<CommentDto> commentChildList;
 
     public Integer getId() {
         return id;

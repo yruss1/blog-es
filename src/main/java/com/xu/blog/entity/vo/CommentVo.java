@@ -17,6 +17,16 @@ public class CommentVo {
     private String message;
     @ApiModelProperty("父评论id")
     private Integer parentId;
+    @ApiModelProperty("回复id")
+    private Integer replyId;
+
+    public Integer getReplyId() {
+        return replyId;
+    }
+
+    public void setReplyId(Integer replyId) {
+        this.replyId = replyId;
+    }
 
     public void setBlogId(Integer blogId) {
         this.blogId = blogId;

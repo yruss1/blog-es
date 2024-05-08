@@ -1,7 +1,9 @@
 package com.xu.blog.service.Impl;
 
-import com.xu.blog.common.exception.BusinessException;
-import com.xu.blog.entity.dto.UserDto;
+import com.xu.blog.entity.dto.UserCommentDto;
+import com.xu.blog.entity.dto.UserInfoDto;
+import com.xu.blog.entity.dto.UserOrgDto;
+import com.xu.blog.entity.mysql.Comment;
 import com.xu.blog.entity.mysql.User;
 import com.xu.blog.entity.vo.RegisterVo;
 import com.xu.blog.repository.CommentRepository;
@@ -10,8 +12,11 @@ import com.xu.blog.repository.QuestRepository;
 import com.xu.blog.repository.UserRepository;
 import com.xu.blog.service.UserService;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -38,41 +43,73 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto userInfo(Long id) {
+    public UserInfoDto userInfo(Long id) {
         Optional<User> byId = userRepository.findById(id);
         if(byId.isPresent()){
             User user = byId.get();
-            UserDto userDto = new UserDto();
-            userDto.setUserName(user.getUserName());
-            userDto.setId(user.getId());
-            userDto.setOrganization(user.getOrganization());
-            userDto.setBlogList(blogRepository.findByAuthor(user.getUserName()));
-            userDto.setQuestList(questRepository.findQuestBySenderName(user.getUserName()));
-            userDto.setCommentList(commentRepository.findCommentByUserId(user.getId()));
-            userDto.setReplyList(questRepository.findQuestByReceiverNameAndReplyMessageIsNotNull(user.getUserName()));
-            userDto.setReceiveQuestList(questRepository.findQuestByReceiverNameAndReplyMessageIsNull(user.getUserName()));
-            return userDto;
-        }else {
-            throw new BusinessException("用户不存在，请检查！");
+            UserInfoDto userInfoDto = new UserInfoDto();
+            userInfoDto.setUserName(user.getUserName());
+            userInfoDto.setId(user.getId());
+            userInfoDto.setOrganization(user.getOrganization());
+            userInfoDto.setBlogList(blogRepository.findByAuthor(user.getUserName()));
+            userInfoDto.setQuestList(questRepository.findQuestBySenderName(user.getUserName()));
+            List<Comment> commentList = commentRepository.findCommentByUserId(user.getId());
+            List<UserCommentDto> userCommentDtoList = new ArrayList<>();
+            for (Comment comment : commentList){
+                UserCommentDto userCommentDto = new UserCommentDto();
+                BeanUtils.copyProperties(comment, userCommentDto);
+                userCommentDto.setBlogTitle(blogRepository.findTitleById(comment.getBlogId()));
+                userCommentDtoList.add(userCommentDto);
+            }
+            userInfoDto.setCommentList(userCommentDtoList);
+            userInfoDto.setReplyList(questRepository.findQuestByReceiverNameAndReplyMessageIsNotNull(user.getUserName()));
+            userInfoDto.setReceiveQuestList(questRepository.findQuestByReceiverNameAndReplyMessageIsNull(user.getUserName()));
+            return userInfoDto;
         }
+        return null;
 
     }
 
     @Override
+    public UserInfoDto userInfo(String userName) {
+        User user = userRepository.findByUserName(userName);
+        UserInfoDto userInfoDto = new UserInfoDto();
+        if (ObjectUtils.isNotEmpty(user)){
+            userInfoDto.setUserName(user.getUserName());
+            userInfoDto.setId(user.getId());
+            userInfoDto.setOrganization(user.getOrganization());
+            userInfoDto.setBlogList(blogRepository.findByAuthor(user.getUserName()));
+            userInfoDto.setQuestList(questRepository.findQuestBySenderName(user.getUserName()));
+            List<Comment> commentList = commentRepository.findCommentByUserId(user.getId());
+            List<UserCommentDto> userCommentDtoList = new ArrayList<>();
+            for (Comment comment : commentList){
+                UserCommentDto userCommentDto = new UserCommentDto();
+                BeanUtils.copyProperties(comment, userCommentDto);
+                userCommentDto.setBlogTitle(blogRepository.findTitleById(comment.getBlogId()));
+                userCommentDtoList.add(userCommentDto);
+            }
+            userInfoDto.setCommentList(userCommentDtoList);
+            userInfoDto.setReplyList(questRepository.findQuestByReceiverNameAndReplyMessageIsNotNull(user.getUserName()));
+            userInfoDto.setReceiveQuestList(questRepository.findQuestByReceiverNameAndReplyMessageIsNull(user.getUserName()));
+            return userInfoDto;
+        }
+        return null;
+    }
+
+    @Override
     public String doRegister(RegisterVo registerVo) {
-        User user = new User();
-        try {
-            user.setUserName(registerVo.getUserName());
-            user.setOrganization(registerVo.getOrganization());
-            user.setPassword(registerVo.getPassword());
-        } catch (Exception e){
+        if (ObjectUtils.anyNull(registerVo.getUserName(), registerVo.getOrganization(), registerVo.getPassword())){
             return "注册失败，请检查输入的参数";
         }
+        User user = new User();
+        user.setUserName(registerVo.getUserName());
+        user.setOrganization(registerVo.getOrganization());
+        user.setPassword(registerVo.getPassword());
         User save = userRepository.save(user);
         if (ObjectUtils.isNotEmpty(save)){
             return "注册成功";
         }
-        return "注册失败";
+        return "注册失败,请重试";
     }
 
     @Override
@@ -83,5 +120,10 @@ public class UserServiceImpl implements UserService {
         }else {
             return "用户名可用";
         }
+    }
+
+    @Override
+    public List<UserOrgDto> selectByOrg(String org, Long userId) {
+        return null;
     }
 }

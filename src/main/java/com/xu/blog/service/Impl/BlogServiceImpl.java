@@ -1,5 +1,6 @@
 package com.xu.blog.service.Impl;
 
+import com.xu.blog.common.exception.BusinessException;
 import com.xu.blog.entity.dto.BlogDto;
 import com.xu.blog.entity.dto.CommentDto;
 import com.xu.blog.entity.es.EsBlog;
@@ -9,8 +10,10 @@ import com.xu.blog.entity.vo.BlogVo;
 import com.xu.blog.mapper.EsResultMapper;
 import com.xu.blog.repository.CommentRepository;
 import com.xu.blog.repository.MysqlBlogRepository;
+import com.xu.blog.repository.UserRepository;
 import com.xu.blog.service.BlogService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -22,11 +25,8 @@ import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author 11582
@@ -36,11 +36,13 @@ import java.util.stream.Collectors;
 public class BlogServiceImpl implements BlogService {
 
     private final MysqlBlogRepository mysqlBlogRepository;
+    private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final ElasticsearchTemplate elasticsearchTemplate;
     private final EsResultMapper esResultMapper;
-    public BlogServiceImpl(MysqlBlogRepository mysqlBlogRepository, CommentRepository commentRepository, ElasticsearchTemplate elasticsearchTemplate, EsResultMapper esResultMapper) {
+    public BlogServiceImpl(MysqlBlogRepository mysqlBlogRepository, UserRepository userRepository, CommentRepository commentRepository, ElasticsearchTemplate elasticsearchTemplate, EsResultMapper esResultMapper) {
         this.mysqlBlogRepository = mysqlBlogRepository;
+        this.userRepository = userRepository;
         this.commentRepository = commentRepository;
         this.elasticsearchTemplate = elasticsearchTemplate;
         this.esResultMapper = esResultMapper;
@@ -87,33 +89,57 @@ public class BlogServiceImpl implements BlogService {
         if (byId.isPresent()){
             BlogDto blogDto = new BlogDto();
             MysqlBlog mysqlBlog = byId.get();
+            List<String> nameList;
+            if (ObjectUtils.isEmpty(mysqlBlog.getAuthor())){
+                throw new BusinessException("用户不存在！");
+            }else {
+                blogDto.setAuthor(mysqlBlog.getAuthor());
+                nameList = userRepository.findUserNameByOrganization(
+                        userRepository
+                                .findByUserName(
+                                        mysqlBlog.getAuthor()
+                                ).getOrganization(), mysqlBlog.getAuthor());
+                blogDto.setRelation(nameList.subList(0, Math.min(4, nameList.size())));
+            }
             List<Comment> commentList = commentRepository.findCommentByBlogId(mysqlBlog.getId());
 
-            List<CommentDto> comments = new ArrayList<>();
-            if (!CollectionUtils.isEmpty(commentList)){
-                for (Comment comment : commentList){
+            Map<Integer, List<Comment>> commentMap = new HashMap<>(16);
+            List<CommentDto> topLevelComments = new ArrayList<>();
+
+            // 将评论按照父评论ID进行分类
+            for (Comment comment : commentList) {
+                if (comment.getParentId() == 0) {
                     CommentDto commentDto = new CommentDto();
+                    commentDto.setUsername(userRepository.findUsernameById(comment.getUserId()));
                     commentDto.setPid(comment.getParentId());
                     commentDto.setId(comment.getId());
                     commentDto.setMessage(comment.getMessage());
                     commentDto.setUserId(comment.getUserId());
-                    commentDto.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(comment.getTime()));
-                    comments.add(commentDto);
+                    commentDto.setTime(comment.getTime());
+                    commentDto.setReplyId(0);
+                    topLevelComments.add(commentDto);
+                } else {
+                    commentMap.computeIfAbsent(comment.getParentId(), k -> new ArrayList<>()).add(comment);
                 }
-                Map<Integer, List<CommentDto>> map = comments
-                        .stream()
-                        .collect(Collectors.groupingBy(CommentDto::getPid));
-                comments.forEach(commentDto -> {
-                    commentDto.setCommentChildList(map.get(commentDto.getId()));
-                    if (CollectionUtils.isEmpty(commentDto.getCommentChildList())){
-                        commentDto.setCommentChildList(new ArrayList<>());
-                    }
-                });
-                comments = comments.stream().filter(v -> v.getPid() == 0).collect(Collectors.toList());
+            }
+            for (CommentDto parentComment : topLevelComments) {
+                List<Comment> childComments = commentMap.getOrDefault(parentComment.getId(), Collections.emptyList());
+                List<CommentDto> secondComments = new ArrayList<>();
+                for (Comment comment : childComments){
+                    CommentDto commentDto = new CommentDto();
+                    commentDto.setUsername(userRepository.findUsernameById(comment.getUserId()));
+                    commentDto.setPid(comment.getParentId() != null ? comment.getParentId() : 0);
+                    commentDto.setId(comment.getId());
+                    commentDto.setMessage(comment.getMessage());
+                    commentDto.setUserId(comment.getUserId());
+                    commentDto.setTime(comment.getTime());
+                    commentDto.setReplyId(comment.getReplyId() != null ? comment.getReplyId() : 0);
+                    secondComments.add(commentDto);
+                }
+                parentComment.setCommentChildList(secondComments);
             }
 
-            blogDto.setAuthor(mysqlBlog.getAuthor());
-            blogDto.setComments(comments);
+            blogDto.setComments(topLevelComments);
             blogDto.setContent(mysqlBlog.getContent());
             blogDto.setCreateTime(mysqlBlog.getCreateTime());
             blogDto.setSummary(mysqlBlog.getSummary());
@@ -128,4 +154,5 @@ public class BlogServiceImpl implements BlogService {
         }
 
     }
+
 }

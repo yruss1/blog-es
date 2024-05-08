@@ -1,5 +1,6 @@
 package com.xu.blog.service.Impl;
 
+import com.xu.blog.common.exception.BusinessException;
 import com.xu.blog.entity.mysql.Comment;
 import com.xu.blog.entity.mysql.Quest;
 import com.xu.blog.entity.vo.CommentVo;
@@ -52,16 +53,21 @@ public class QuestServiceImpl implements QuestService {
     @Override
     public String comment(CommentVo commentVo) {
         Comment comment = new Comment();
+        if (ObjectUtils.anyNull(commentVo.getBlogId(), commentVo.getMessage(), commentVo.getUserId())){
+            throw new BusinessException("参数不合法");
+        }
         comment.setBlogId(commentVo.getBlogId());
         comment.setMessage(commentVo.getMessage());
         comment.setUserId(commentVo.getUserId());
-        comment.setParentId(commentVo.getParentId());
+        comment.setParentId(Math.max(commentVo.getParentId(), 0));
+        comment.setReplyId(Math.max(commentVo.getReplyId(), 0));
         comment.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis()));
         Comment save = commentRepository.save(comment);
         if (save.getId() != null){
-            return "评论成功";
+            return String.valueOf(save.getId());
+        }else {
+            throw new BusinessException("评论失败！");
         }
-        return "评论失败";
     }
 
     @Override

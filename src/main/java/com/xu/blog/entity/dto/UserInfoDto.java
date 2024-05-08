@@ -1,6 +1,5 @@
 package com.xu.blog.entity.dto;
 
-import com.xu.blog.entity.mysql.Comment;
 import com.xu.blog.entity.mysql.MysqlBlog;
 import com.xu.blog.entity.mysql.Quest;
 import io.swagger.annotations.ApiModel;
@@ -12,7 +11,7 @@ import java.util.List;
  * @author 11582
  */
 @ApiModel("用户信息实体类")
-public class UserDto {
+public class UserInfoDto {
     @ApiModelProperty("用户id")
     private Long id;
     @ApiModelProperty("用户名")
@@ -26,7 +25,7 @@ public class UserDto {
     @ApiModelProperty("用户博客历史")
     private List<MysqlBlog> blogList;
     @ApiModelProperty("用户评论历史")
-    private List<Comment> commentList;
+    private List<UserCommentDto> commentList;
     @ApiModelProperty("用户收到的提问历史")
     private List<Quest> receiveQuestList;
 
@@ -86,14 +85,14 @@ public class UserDto {
         this.blogList = blogList;
     }
 
-    public List<Comment> getCommentList() {
+    public List<UserCommentDto> getCommentList() {
         return commentList;
     }
 
-    public void setCommentList(List<Comment> commentList) {
+    public void setCommentList(List<UserCommentDto> commentList) {
         this.commentList = commentList;
     }
 
-    public UserDto() {
+    public UserInfoDto() {
     }
 }

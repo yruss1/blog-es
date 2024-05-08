@@ -17,8 +17,6 @@ public class Comment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "quest_id")
-    private Integer questId;
     @Column(name = "user_id")
     private Long userId;
     @Column(name = "message")
@@ -29,5 +27,7 @@ public class Comment implements Serializable {
     private Integer blogId;
     @Column(name = "parent_id")
     private Integer parentId;
+    @Column(name = "reply_id")
+    private Integer replyId;
 
 }

@@ -16,6 +16,15 @@ public class BlogDto {
     private String createTime;
     private String updateTime;
     private List<CommentDto> comments;
+    private List<String> relation;
+
+    public List<String> getRelation() {
+        return relation;
+    }
+
+    public void setRelation(List<String> relation) {
+        this.relation = relation;
+    }
 
     public String getTitle() {
         return title;
