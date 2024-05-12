@@ -1,6 +1,5 @@
 package com.xu.blog.service.Impl;
 
-import com.xu.blog.common.exception.BusinessException;
 import com.xu.blog.entity.dto.BlogDto;
 import com.xu.blog.entity.dto.CommentDto;
 import com.xu.blog.entity.es.EsBlog;
@@ -89,57 +88,62 @@ public class BlogServiceImpl implements BlogService {
         if (byId.isPresent()){
             BlogDto blogDto = new BlogDto();
             MysqlBlog mysqlBlog = byId.get();
-            List<String> nameList;
+            List<String> nameList = new ArrayList<>();
             if (ObjectUtils.isEmpty(mysqlBlog.getAuthor())){
-                throw new BusinessException("用户不存在！");
+                log.warn("用户不存在");
             }else {
-                blogDto.setAuthor(mysqlBlog.getAuthor());
-                nameList = userRepository.findUserNameByOrganization(
-                        userRepository
-                                .findByUserName(
-                                        mysqlBlog.getAuthor()
-                                ).getOrganization(), mysqlBlog.getAuthor());
-                blogDto.setRelation(nameList.subList(0, Math.min(4, nameList.size())));
-            }
-            List<Comment> commentList = commentRepository.findCommentByBlogId(mysqlBlog.getId());
+                String author = mysqlBlog.getAuthor();
+                blogDto.setAuthor(author);
+                try {
+                    String organization = userRepository.findByUserName(author).getOrganization();
+                    if (!ObjectUtils.isEmpty(organization)){
+                        nameList.addAll(userRepository.findUserNameByOrganization(organization, author));
+                    }
+                    List<Comment> commentList = commentRepository.findCommentByBlogId(mysqlBlog.getId());
+                    Map<Integer, List<Comment>> commentMap = new HashMap<>(16);
+                    List<CommentDto> topLevelComments = new ArrayList<>();
 
-            Map<Integer, List<Comment>> commentMap = new HashMap<>(16);
-            List<CommentDto> topLevelComments = new ArrayList<>();
+                    // 将评论按照父评论ID进行分类
+                    for (Comment comment : commentList) {
+                        nameList.add(userRepository.findUsernameById(comment.getUserId()));
+                        if (comment.getParentId() == 0) {
+                            CommentDto commentDto = new CommentDto();
+                            commentDto.setUsername(userRepository.findUsernameById(comment.getUserId()));
+                            commentDto.setPid(comment.getParentId());
+                            commentDto.setId(comment.getId());
+                            commentDto.setMessage(comment.getMessage());
+                            commentDto.setUserId(comment.getUserId());
+                            commentDto.setTime(comment.getTime());
+                            commentDto.setReplyId(0);
+                            topLevelComments.add(commentDto);
+                        } else {
+                            commentMap.computeIfAbsent(comment.getParentId(), k -> new ArrayList<>()).add(comment);
+                        }
+                    }
+                    for (CommentDto parentComment : topLevelComments) {
+                        List<Comment> childComments = commentMap.getOrDefault(parentComment.getId(), Collections.emptyList());
+                        List<CommentDto> secondComments = new ArrayList<>();
+                        for (Comment comment : childComments){
+                            CommentDto commentDto = new CommentDto();
+                            commentDto.setUsername(userRepository.findUsernameById(comment.getUserId()));
+                            commentDto.setPid(comment.getParentId() != null ? comment.getParentId() : 0);
+                            commentDto.setId(comment.getId());
+                            commentDto.setMessage(comment.getMessage());
+                            commentDto.setUserId(comment.getUserId());
+                            commentDto.setTime(comment.getTime());
+                            commentDto.setReplyId(comment.getReplyId() != null ? comment.getReplyId() : 0);
+                            secondComments.add(commentDto);
+                        }
+                        parentComment.setCommentChildList(secondComments);
+                    }
 
-            // 将评论按照父评论ID进行分类
-            for (Comment comment : commentList) {
-                if (comment.getParentId() == 0) {
-                    CommentDto commentDto = new CommentDto();
-                    commentDto.setUsername(userRepository.findUsernameById(comment.getUserId()));
-                    commentDto.setPid(comment.getParentId());
-                    commentDto.setId(comment.getId());
-                    commentDto.setMessage(comment.getMessage());
-                    commentDto.setUserId(comment.getUserId());
-                    commentDto.setTime(comment.getTime());
-                    commentDto.setReplyId(0);
-                    topLevelComments.add(commentDto);
-                } else {
-                    commentMap.computeIfAbsent(comment.getParentId(), k -> new ArrayList<>()).add(comment);
+                    blogDto.setComments(topLevelComments);
+                }catch (NullPointerException e){
+                    log.warn("用户：{}关系不存在", author);
                 }
-            }
-            for (CommentDto parentComment : topLevelComments) {
-                List<Comment> childComments = commentMap.getOrDefault(parentComment.getId(), Collections.emptyList());
-                List<CommentDto> secondComments = new ArrayList<>();
-                for (Comment comment : childComments){
-                    CommentDto commentDto = new CommentDto();
-                    commentDto.setUsername(userRepository.findUsernameById(comment.getUserId()));
-                    commentDto.setPid(comment.getParentId() != null ? comment.getParentId() : 0);
-                    commentDto.setId(comment.getId());
-                    commentDto.setMessage(comment.getMessage());
-                    commentDto.setUserId(comment.getUserId());
-                    commentDto.setTime(comment.getTime());
-                    commentDto.setReplyId(comment.getReplyId() != null ? comment.getReplyId() : 0);
-                    secondComments.add(commentDto);
-                }
-                parentComment.setCommentChildList(secondComments);
-            }
 
-            blogDto.setComments(topLevelComments);
+            }
+            blogDto.setRelation(nameList);
             blogDto.setContent(mysqlBlog.getContent());
             blogDto.setCreateTime(mysqlBlog.getCreateTime());
             blogDto.setSummary(mysqlBlog.getSummary());

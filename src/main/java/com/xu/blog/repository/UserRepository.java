@@ -37,4 +37,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "select u.user_name from t_user u where u.id = ?1", nativeQuery = true)
     String findUsernameById(Long id);
 
+    /**
+     * 根据用户名查找组织
+     * @param username 用户名
+     * @return 组织
+     */
+    String findOrganizationByUserName(String username);
+
 }

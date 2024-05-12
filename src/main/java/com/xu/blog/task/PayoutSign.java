@@ -6,30 +6,30 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @author 11582
- */
-@Slf4j
-public class Sign {
+import static com.xu.blog.task.tool.*;
 
-    public static final String KEY = "Ptmt7u6SURBROWxVIdpEg194ZzszMyXdrY72QBhFhYBPOMEazEY916Sgm4Gcleutjbks4eJfTWdcTPfugxPcCT8n4ynY2gAhJY6gcMjaB3A2pdxmrert4JwFs9xH34Rr";
+@Slf4j
+public class PayoutSign {
+
+    public static final String KEY = _51key;
     public static Map<String, Object> signMap = new HashMap<>(16);
     static {
-        signMap.put("mchNo", "M1714027497");
-        signMap.put("appId", "662f155ee4b04367e2019654");
+
         signMap.put("mchOrderNo", "202205101" + (int)((Math.random()*9+1)*100000000));
-        signMap.put("amount", 10000);
+        signMap.put("mchNo", "M1714027497");
+        signMap.put("appId", _51);
+        signMap.put("amount","10000");
         signMap.put("currency", "INR");
-        signMap.put("clientIp", "192.168.21.107");
-        signMap.put("customerName", "Charli");
-        signMap.put("customerEmail", "Charli@gmail.com");
+        signMap.put("entryType", "IMPS");
+        signMap.put("accountNo","HDFC0000247");
+        signMap.put("accountCode","HDFC0000247");
         signMap.put("notifyUrl", "https://www.google.com");
-        signMap.put("customerPhone", "8197220658");
-        signMap.put("reqTime", System.currentTimeMillis());
-//        signMap.put("channelExtra", "{\"payType\":\"PIX\"}");
+        signMap.put("accountName","WANG JUN");
+        signMap.put("accountEmail","1243149587@qq.com");
+        signMap.put("accountPhone","9811837378");
+        signMap.put("reqTime", "" + System.currentTimeMillis());
 
     }
     public static Map<String, Object> getSign(Map<String, Object> map, String key) {
@@ -85,7 +85,6 @@ public class Sign {
     public static void main(String[] args) {
         signMap = getSign(signMap, KEY);
         log.info("{}", GsonUtil.toJsonString(signMap));
-        log.info("{}", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis()));
     }
 
     public static Map<String, Object> sortMapByKey(Map<String, Object>map) {
