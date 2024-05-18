@@ -5,6 +5,7 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import com.xu.blog.common.Result;
+import com.xu.blog.common.config.ApiConfig;
 import com.xu.blog.entity.dto.UserInfoDto;
 import com.xu.blog.entity.dto.UserOrgDto;
 import com.xu.blog.entity.mysql.User;
@@ -15,10 +16,14 @@ import com.xu.blog.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.*;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author 11582
@@ -116,6 +121,58 @@ public class UserController {
     public Result<String> add(@RequestBody BlogVo vo){
         blogService.addBlog(vo);
         return Result.ok();
+    }
+
+    @SaCheckLogin
+    @PostMapping("/pic/add")
+    @ApiOperation("添加图片")
+    public Result<String> addPic(@RequestParam("file") MultipartFile file){
+        if (ObjectUtils.isEmpty(file)) {
+            return Result.error("文件不可为空！");
+        }
+        String fileName=file.getOriginalFilename();
+        if(StringUtils.isNotEmpty(fileName)) {
+            if(!fileName.matches("^.+\\.(jpg|png|gif)$")) {
+                //表示不满足规则
+                return Result.error("文件格式不符合要求！");
+            }
+            String fileFormat = fileName.substring(fileName.lastIndexOf("."));
+
+            String uuid = UUID.randomUUID()
+                    .toString().trim().replaceAll("-", "");
+            //创建空文件
+            File newFile = new File(
+                    ApiConfig.UPLOAD_URL + File.separator + uuid + fileFormat);
+            //保存之后的文件路径
+            String absolutePath = null;
+            try {
+                absolutePath = newFile.getCanonicalPath();
+                /*判断路径中的文件夹是否存在，如果不存在，先创建文件夹*/
+                String dirPath = absolutePath.substring(0,
+                        absolutePath.lastIndexOf(File.separator));
+                File dir = new File(dirPath);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                //获取multipart文件输入流
+                InputStream ins = file.getInputStream();
+                OutputStream os = new FileOutputStream(newFile);
+                int bytesRead = 0;
+                byte[] buffer = new byte[8192];
+                //写入文件
+                while ((bytesRead = ins.read(buffer, 0, 8192)) != -1) {
+                    os.write(buffer, 0, bytesRead);
+                }
+                os.close();
+                ins.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            assert absolutePath != null;
+            int i = absolutePath.lastIndexOf("\\");
+            return Result.ok(absolutePath.substring(i + 1));
+        }
+        return Result.error("文件名不可为空！");
     }
 
     @SaCheckLogin

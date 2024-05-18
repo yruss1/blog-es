@@ -4,11 +4,11 @@ import com.xu.blog.common.util.GsonUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static com.xu.blog.task.tool.*;
 
 /**
  * @author 11582
@@ -16,26 +16,26 @@ import java.util.*;
 @Slf4j
 public class PaymentSign {
 
-    public static final String KEY = "ZQ9Hpu0rIUWdH6RZ2hNrKtGSIyYTRDf0DXhyapjw7EQJ2WasbnRDTFodsJjSb8veBr41sj2rIFAI1Sl8c56tMgECPxlFrhJEa75eWV6Ku7P4PK8JrQSyAWedfzW0y3im";
     public static Map<String, Object> signMap = new HashMap<>(16);
     static {
         signMap.put("mchNo", "M1714027497");
-        signMap.put("appId", "66389601e4b016ca058dbc28");
+        signMap.put("appId", sqa_app_id);
         signMap.put("mchOrderNo", "202205101" + (int)((Math.random()*9+1)*100000000));
-        signMap.put("amount", "20000");
+        signMap.put("amount", "100");
         signMap.put("currency", "BRL");
         signMap.put("clientIp", "192.168.21.107");
-        signMap.put("customerName", "Charli");
+        signMap.put("customerName", "John Marvin");
         signMap.put("customerEmail", "Charli@gmail.com");
-        signMap.put("notifyUrl", "https://www.google.com");
+        signMap.put("notifyUrl", SQA_PAYMENT_NOTIFY_URL);
         signMap.put("customerPhone", "8197220658");
         signMap.put("reqTime", "" + System.currentTimeMillis());
-        signMap.put("channelExtra", "{\"payType\":\"PIX\"}");
+//        signMap.put("channelExtra", "{\"document\":\"12312312387\"}");
 
     }
     public static Map<String, Object> getSign(Map<String, Object> map, String key) {
         List<String> list = new ArrayList<>();
         map = sortMapByKey(map);
+        log.info("{}", map);
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             if (null != entry.getValue() && !"".equals(entry.getValue())) {
                 list.add(entry.getKey() + "=" + entry.getValue() + "&");
@@ -49,6 +49,7 @@ public class PaymentSign {
         }
         String result = sb.toString();
         result = result + "key=" + key;
+        log.info("{}", result);
         result = Objects.requireNonNull(md5(result, "UTF-8")).toUpperCase();
         map.put("sign", result);
         return map;
@@ -84,11 +85,8 @@ public class PaymentSign {
     }
 
     public static void main(String[] args) {
-        signMap = getSign(signMap, KEY);
-        String amount = new BigInteger(String.valueOf(20000)).divide(new BigInteger("100")).toString();
-        log.info("{}", amount);
+        signMap = getSign(signMap, _sqAlaKey);
         log.info("{}", GsonUtil.toJsonString(signMap));
-        log.info("{}", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis()));
     }
 
     public static Map<String, Object> sortMapByKey(Map<String, Object>map) {

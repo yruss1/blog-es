@@ -38,6 +38,6 @@ public interface QuestRepository extends JpaRepository<Quest, Integer> {
      * @param senderName 提问用户名
      * @return 被提问的用户名list
      */
-    List<String> findReceiverNameBySenderNameAndReceiverNameIsNotAndSenderName(String senderName);
+    List<String> findReceiverNameBySenderName(String senderName);
 
 }

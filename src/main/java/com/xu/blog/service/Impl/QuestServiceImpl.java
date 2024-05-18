@@ -129,7 +129,7 @@ public class QuestServiceImpl implements QuestService {
                 return null;
             }
             BeanUtils.copyProperties(quest, questDto);
-            List<String> nameList = questRepository.findReceiverNameBySenderNameAndReceiverNameIsNotAndSenderName(quest.getSenderName());
+            List<String> nameList = questRepository.findReceiverNameBySenderName(quest.getSenderName());
             List<String> orgList = userRepository.findUserNameByOrganization(userRepository.findOrganizationByUserName(quest.getSenderName()), quest.getSenderName());
             nameList.addAll(orgList);
             questDto.setRelation(nameList);

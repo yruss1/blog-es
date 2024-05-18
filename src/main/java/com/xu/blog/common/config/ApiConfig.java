@@ -9,4 +9,5 @@ public class ApiConfig {
     public static final String AUTHORIZATION = "Authorization";
     public static final String AUTH_PREFIX = "Bearer ";
     public static final String DEFAULT_PAGE_SIZE = "10";
+    public static final String UPLOAD_URL = "D:\\yruss\\programme\\blog_index-master\\pic";
 }

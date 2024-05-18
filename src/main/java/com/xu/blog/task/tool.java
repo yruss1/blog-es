@@ -1,7 +1,15 @@
 package com.xu.blog.task;
 
 public class tool {
-
+    public static final String TARS_PAYMENT_NOTIFY_URL = "https://live.dreamo9.com/api/payment/notify/tarspay";
+    public static final String FIRE_PAYMENT_NOTIFY_URL = "https://live.dreamo9.com/api/payment/notify/firebank";
+    public static final String SQA_PAYMENT_NOTIFY_URL = "https://live.dreamo9.com/api/payment/notify/sqala";
+    public static final String sqa_app_id = "662f1885e4b09fe26120452f";
+    public static final String tars_mch_no = "M1715265219";
+    public static final String tars_app_id = "66432ab3e4b016ca058dbc2d";
+    public static final String fire_app_id = "66444fd5e4b016ca058dbc2e";
+    public static final String tars_payment_key = "eIUIn60G9j2yP7OSKzfYA8RwOUQiuxWSFKgxtrzgjxuhvf3R4hl96PqQVkbxyHILalyI3bCWWFr7gbkQ68A3ZfRgdXdvwqC8b4SldnhSefgqf25BPOcNVRRo7ELXeLXe";
+    public static final String fire_payment_key = "kJHOwdfX3nVPqSHzfNdeKU9c2XyaCN9wLj65ikNOskW4izEWJik1Nn7lTh2XgABa9ah6bj7eIKeEX1P8tINlZxBk49sGOJUsU1mvEsxggErpCMGj25oTp6qOkeffXddS";
     public static String _51="6629fbe9e4b0e320c5689d45";
     public static String _51key="2LwBl53LmdlzpzzjgJkKws9dWJKBeU7N9t1f5p1RKVR8vQZgdRsJGeWDX51XKIsAkr8Vjas292pEIbtaGQ1se1xztKoc8zTsytm1v4xnnzeyOGkKnNMjazwX9jVD1uvg";
     public static String _wikPay="662b3d5fe4b0e320c5689d48";

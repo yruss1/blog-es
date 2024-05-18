@@ -13,24 +13,22 @@ import static com.xu.blog.task.tool.*;
 @Slf4j
 public class PayoutSign {
 
-    public static final String KEY = _51key;
+    public static final String KEY = _sqAlaKey;
     public static Map<String, Object> signMap = new HashMap<>(16);
     static {
-
         signMap.put("mchOrderNo", "202205101" + (int)((Math.random()*9+1)*100000000));
         signMap.put("mchNo", "M1714027497");
-        signMap.put("appId", _51);
-        signMap.put("amount","10000");
-        signMap.put("currency", "INR");
-        signMap.put("entryType", "IMPS");
-        signMap.put("accountNo","HDFC0000247");
+        signMap.put("appId", sqa_app_id);
+        signMap.put("amount","100");
+        signMap.put("currency", "BRL");
+        signMap.put("entryType", "PIX");
+        signMap.put("accountNo","8197220658");
         signMap.put("accountCode","HDFC0000247");
-        signMap.put("notifyUrl", "https://www.google.com");
+//        signMap.put("notifyUrl", "https://live.dreamo9.com/api/payout/notify/firebanking");
         signMap.put("accountName","WANG JUN");
         signMap.put("accountEmail","1243149587@qq.com");
-        signMap.put("accountPhone","9811837378");
-        signMap.put("reqTime", "" + System.currentTimeMillis());
-
+        signMap.put("accountPhone","8197220658");
+//        signMap.put("channelExtra", "{\"document\":\"41934375829\"}");
     }
     public static Map<String, Object> getSign(Map<String, Object> map, String key) {
         List<String> list = new ArrayList<>();
